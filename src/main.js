@@ -4,6 +4,7 @@ import store from './store'
 import ElementUI from 'element-ui';
 import locale from 'element-ui/lib/locale/lang/en'
 import 'element-ui/lib/theme-chalk/index.css';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 Vue.use(ElementUI, { locale })
 
