@@ -11,12 +11,45 @@ export default new Vuex.Store({
     getters: {
         stationsWithId(state) {
             return state.stations.map((line) => {
-                return {...line,
+                return {
+                    ...line,
                     id: uniqid(),
                     stations: line.stations.map((station) => {
-                        return  {...station, id: uniqid()}
+                        return {
+                            ...station,
+                            id: uniqid(),
+                            // color: line.hex_color
+                        }
                     })
                 }
+            })
+        },
+        geojson(state, getters) {
+            const stationsGeo = []
+            getters.stationsWithId.forEach((line) => {
+                line.stations.forEach((station) => {
+                    const stationGeo = {
+                        'type': 'Feature',
+                        'geometry': {
+                            'type': 'Point',
+                            'coordinates': [
+                                station.lng, station.lat
+                            ]
+                        },
+                        'properties': {
+                            name: station.name,
+                            color: line.hex_color,
+                            admArea: station.admArea,
+                            district: station.district,
+                            status: station.status
+                        },
+                    }
+                    stationsGeo.push(stationGeo)
+                })
+            })
+            return ({
+                'type': 'FeatureCollection',
+                'features': stationsGeo
             })
         }
     },
