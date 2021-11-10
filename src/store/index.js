@@ -18,7 +18,6 @@ export default new Vuex.Store({
                         return {
                             ...station,
                             id: uniqid(),
-                            // color: line.hex_color
                         }
                     })
                 }
@@ -29,14 +28,14 @@ export default new Vuex.Store({
             getters.stationsWithId.forEach((line) => {
                 line.stations.forEach((station) => {
                     const stationGeo = {
-                        'type': 'Feature',
-                        'geometry': {
-                            'type': 'Point',
-                            'coordinates': [
+                        type: 'Feature',
+                        geometry: {
+                            type: 'Point',
+                            coordinates: [
                                 station.lng, station.lat
                             ]
                         },
-                        'properties': {
+                        properties: {
                             name: station.name,
                             color: line.hex_color,
                             admArea: station.admArea,
@@ -48,8 +47,8 @@ export default new Vuex.Store({
                 })
             })
             return ({
-                'type': 'FeatureCollection',
-                'features': stationsGeo
+                type: 'FeatureCollection',
+                features: stationsGeo
             })
         }
     },

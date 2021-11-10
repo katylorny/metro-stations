@@ -23,40 +23,12 @@ export default {
     ]),
     initMap() {
       mapboxgl.accessToken = 'pk.eyJ1Ijoia2F0eWxvcm55IiwiYSI6ImNrdnNhZDFjcmIxczgyb3M3azl6ZG8xamEifQ.egE0UVDX4gVCMuHly5a5gw';
-      // const geojson = {
-      //   'type': 'FeatureCollection',
-      //   'features': [
-      //     {
-      //       'type': 'Feature',
-      //       'geometry': {
-      //         'type': 'Point',
-      //         'coordinates': [
-      //           37.6030121, 55.88387
-      //         ]
-      //       },
-      //       'properties': {
-      //         name: 'Бибирево'
-      //       },
-      //     },
-      //     {
-      //       'type': 'Feature',
-      //       'geometry': {
-      //         'type': 'Point',
-      //         'coordinates': [
-      //           37.58647, 55.8990326
-      //         ]
-      //       },
-      //       'properties': {
-      //         name: 'Алтуфьево'
-      //       },
-      //     }
-      //   ]
-      // }
+
       const map = new mapboxgl.Map({
         container: 'map', // container ID
         style: 'mapbox://styles/mapbox/streets-v11', // style URL
-        center: [37.6030121, 55.88387], // starting position [lng, lat]
-        zoom: 15 // starting zoom
+        center: [37.6156, 55.7522],
+        zoom: 10 // starting zoom
       });
       map.on('load', () => {
         for (const marker of this.$store.getters.geojson.features) {
