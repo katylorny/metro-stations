@@ -6,7 +6,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        stations: []
+        stations: [],
+        // selectedStation: {}
     },
     getters: {
         stationsWithId(state) {
@@ -38,6 +39,7 @@ export default new Vuex.Store({
                         properties: {
                             name: station.name,
                             color: line.hex_color,
+                            id: station.id,
                             admArea: station.admArea,
                             district: station.district,
                             status: station.status
@@ -49,6 +51,11 @@ export default new Vuex.Store({
             return ({
                 type: 'FeatureCollection',
                 features: stationsGeo
+            })
+        },
+        getStationById: (state, getters) => id => {
+            return getters.geojson.features.find(station => {
+                return station.properties.id === id
             })
         }
     },

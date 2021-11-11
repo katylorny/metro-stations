@@ -8,16 +8,20 @@
         <Map/>
       </el-main>
     </el-container>
+    <station-modal title="Бибирево"/>
   </div>
 </template>
 
 <script>
 
 import Map from "../components/Map";
+import StationModal from "../components/StationModal";
+import {eventBus} from "../main";
 
 export default {
   name: "Main",
   components: {
+    StationModal,
     Map
   },
   data() {
@@ -25,7 +29,8 @@ export default {
       defaultProps: {
         children: 'children',
         label: 'label'
-      }
+      },
+      isModalOpened: false
     }
   },
 
@@ -37,9 +42,10 @@ export default {
           children: line.stations.map((station) => {
             return {
               label: station.name,
-              admArea: station.admArea,
-              district: station.district,
-              status: station.status
+              // admArea: station.admArea,
+              // district: station.district,
+              // status: station.status,
+              id: station.id
             }
           })
         }
@@ -49,8 +55,19 @@ export default {
 
   methods: {
     handleNodeClick(data) {
-      console.log(data);
-    }
+      if (!data.children) {
+        // this.isModalOpened = true
+
+        console.log(data);
+        eventBus.$emit(`onStationClick`, {
+          // isOpened: true,
+          activeStationId: data.id
+        })
+      }
+    },
+    // closeModal() {
+    //   this.isModalOpened = false
+    // }
   }
 }
 </script>
@@ -66,6 +83,7 @@ main {
   flex-direction: column;
   height: 100%;
   flex-grow: 1;
+  position: relative;
 
   &::v-deep {
     .el-tree-node__content {
@@ -76,10 +94,14 @@ main {
 
 .el-container {
   flex: 1;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .el-aside {
   padding: 20px 0;
+  height: 100vh;
+  overflow: auto;
 }
 
 </style>

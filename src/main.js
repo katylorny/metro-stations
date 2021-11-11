@@ -10,6 +10,8 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 
+export const eventBus = new Vue()
+
 new Vue({
   store,
   render: h => h(App)

@@ -5,6 +5,7 @@
 <script>
 import mapboxgl from 'mapbox-gl';
 import {mapMutations} from "vuex";
+import {eventBus} from "../main";
 
 export default {
   name: "Map",
@@ -21,6 +22,12 @@ export default {
     ...mapMutations([
       'setStations'
     ]),
+    getActiveStationId(id) {
+      eventBus.$emit(`onStationClick`, {
+        activeStationId: id,
+        // isOpened: true
+      })
+    },
     initMap() {
       mapboxgl.accessToken = 'pk.eyJ1Ijoia2F0eWxvcm55IiwiYSI6ImNrdnNhZDFjcmIxczgyb3M3azl6ZG8xamEifQ.egE0UVDX4gVCMuHly5a5gw';
 
@@ -40,7 +47,9 @@ export default {
           el.style.height = `20px`;
 
           el.addEventListener('click', () => {
-            console.log(marker.properties);
+            this.getActiveStationId(marker.properties.id)
+            // console.log(marker.properties);
+            // console.log(1, eventBus);
           });
 
           new mapboxgl.Marker(el)
