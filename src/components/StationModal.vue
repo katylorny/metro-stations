@@ -2,6 +2,13 @@
   <div class="overlay" v-if="isOpened" @click.self="closeModal">
     <div class="modal">
       <div class="modal__header">
+        <inline-svg
+            :src="metroLogoImg"
+            width="25"
+            height="25"
+            :fill="`#${activeStation.color}`"
+            aria-label="My image"
+        />
         <h1 class="modal__title">
           {{ activeStation.name }}
         </h1>
@@ -23,6 +30,7 @@
 <script>
 import {eventBus} from "../main";
 import {mapGetters} from "vuex";
+import metroLogoImg from "../assets/img/metro-logo.svg"
 
 export default {
   name: "StationModal",
@@ -31,6 +39,7 @@ export default {
   },
   data() {
     return {
+      metroLogoImg,
       id: '',
       isOpened: false,
       activeStation: {},
@@ -89,6 +98,8 @@ export default {
 .modal__title {
   margin-right: 10px;
   font-size: 18px;
+  margin-left: 8px;
+  margin-top: 16px;
 }
 
 .modal__close-button {
@@ -99,6 +110,15 @@ export default {
   height: 20px;
   width: 20px;
   background: transparent;
+  transition: all 0.2s ease;
+
+  i {
+    font-size: 20px;
+  }
+
+  &:hover {
+    transform: scale(1.3);
+  }
 }
 
 .modal__main {

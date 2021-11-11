@@ -16,7 +16,9 @@ export default {
         .then((response) => {
           this.setStations(response)
         })
-    this.initMap()
+        .then(() => {
+          this.initMap()
+        })
   },
   methods: {
     ...mapMutations([

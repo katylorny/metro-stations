@@ -13,6 +13,7 @@
     "mapbox-gl": "^2.6.0",
     "uniqid": "^5.4.0",
     "vue": "^2.6.11",
+    "vue-inline-svg": "^2.1.0",
     "vuex": "^3.4.0"
   },
   "devDependencies": {
