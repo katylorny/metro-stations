@@ -1,9 +1,11 @@
 <template>
   <div class="main">
     <el-container>
-      <el-aside>
-        <el-tree :data="stations" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
-      </el-aside>
+      <vue-custom-scrollbar class="scroll-area">
+        <el-aside>
+          <el-tree :data="stations" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+        </el-aside>
+      </vue-custom-scrollbar>
       <el-main>
         <Map/>
       </el-main>
@@ -17,12 +19,14 @@
 import Map from "../components/Map";
 import StationModal from "../components/StationModal";
 import {eventBus} from "../main";
+import vueCustomScrollbar from 'vue-custom-scrollbar'
 
 export default {
   name: "Main",
   components: {
     StationModal,
-    Map
+    Map,
+    vueCustomScrollbar
   },
   data() {
     return {
@@ -100,8 +104,11 @@ main {
 
 .el-aside {
   padding: 20px 0;
-  height: 100vh;
   overflow: auto;
 }
 
+.scroll-area {
+  height: 100vh;
+
+}
 </style>

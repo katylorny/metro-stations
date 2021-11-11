@@ -6,6 +6,7 @@ import locale from 'element-ui/lib/locale/lang/en'
 import 'element-ui/lib/theme-chalk/index.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import InlineSvg from 'vue-inline-svg';
+import "vue-custom-scrollbar/dist/vueScrollbar.css"
 
 Vue.component('inline-svg', InlineSvg);
 Vue.use(ElementUI, { locale })
