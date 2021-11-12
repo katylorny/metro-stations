@@ -6,7 +6,7 @@
             :src="metroLogoImg"
             width="25"
             height="25"
-            :fill="`#${activeStation.color}`"
+            :fill="activeStation.color"
             aria-label="My image"
         />
         <h1 class="modal__title">

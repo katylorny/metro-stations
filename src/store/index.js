@@ -38,7 +38,8 @@ export default new Vuex.Store({
                         },
                         properties: {
                             name: station.name,
-                            color: line.hex_color,
+                            // color: line.hex_color,
+                            color: `#${line.hex_color}`,
                             id: station.id,
                             admArea: station.admArea,
                             district: station.district,

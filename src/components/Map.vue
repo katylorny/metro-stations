@@ -36,53 +36,44 @@ export default {
       const map = new mapboxgl.Map({
         container: 'map', // container ID
         style: 'mapbox://styles/mapbox/streets-v11', // style URL
+        // style: {
+        //   "version": 8,
+        //   // url: 'mapbox://styles/mapbox/streets-v11',
+        //   // "name": "Mapbox Streets",
+        //   "sources": {
+        //     "mapbox-streets": {
+        //       "type": "vector",
+        //       "url": 'mapbox://styles/mapbox/streets-v11'
+        //     }
+        //   },
+        //   "layers": []
+        // },
         center: [37.6156, 55.7522],
         zoom: 10 // starting zoom
-      });
+      })
+
+
       map.on('load', () => {
-        for (const marker of this.$store.getters.geojson.features) {
 
-          const el = document.createElement('div');
-          el.className = 'marker';
-          el.style.backgroundColor = `#${marker.properties.color}`;
-          el.style.width = `20px`;
-          el.style.height = `20px`;
+        map.addSource(`stationsData`, {
+          type: `geojson`,
+          data: this.$store.getters.geojson
+        })
 
-          el.addEventListener('click', () => {
-            this.getActiveStationId(marker.properties.id)
-            // console.log(marker.properties);
-            // console.log(1, eventBus);
-          });
-
-          new mapboxgl.Marker(el)
-              .setLngLat(marker.geometry.coordinates)
-              .addTo(map);
-        }
-        // new mapboxgl.Marker()
-        //     .setLngLat([37.6030121, 55.88387])
-        //     .addTo(map);
-        // map.addSource('ethnicity', {
-        //   type: 'vector',
-        //   url: 'mapbox://examples.8fgz4egr',
-        // });
-//         map.addLayer({
-//           'id': 'population',
-//           'type': 'circle',
-//           'source': 'ethnicity',
-//           'source-layer': 'sf2010',
-//           'paint': {
-// // Make circles larger as the user zooms from z12 to z22.
-//             'circle-radius': {
-//               'base': 1.75,
-//               'stops': [
-//                 [12, 2],
-//                 [22, 180]
-//               ]
-//             },
-//             'circle-color': 'red'
-//           }
-//         });
+        map.addLayer({
+          'id': 'stations',
+          'type': 'circle',
+          'source': 'stationsData',
+          'paint': {
+            'circle-radius': 10,
+            'circle-color': ["get", "color"]
+          }
+        });
       });
+
+      map.on(`click`, `stations`, (e) => {
+        this.getActiveStationId(e.features[0].properties.id)
+      })
     },
   }
 }
@@ -99,9 +90,9 @@ export default {
 </style>
 
 <style lang="scss">
-.marker {
-  background: red;
-  border-radius: 50%;
-  cursor: pointer;
-}
+//.marker {
+//  background: red;
+//  border-radius: 50%;
+//  cursor: pointer;
+//}
 </style>
