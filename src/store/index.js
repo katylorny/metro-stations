@@ -7,6 +7,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         stations: [],
+        stops: []
         // selectedStation: {}
     },
     getters: {
@@ -24,7 +25,7 @@ export default new Vuex.Store({
                 }
             })
         },
-        geojson(state, getters) {
+        stationsGeojson(state, getters) {
             const stationsGeo = []
             getters.stationsWithId.forEach((line) => {
                 line.stations.forEach((station) => {
@@ -54,8 +55,26 @@ export default new Vuex.Store({
                 features: stationsGeo
             })
         },
+        stopsGeojson(state) {
+            return {
+                type: 'FeatureCollection',
+                features: state.stops.map(stop => {
+                    return {
+                        type: 'Feature',
+                        geometry: {
+                            type: 'Point',
+                            coordinates: stop.geom.coordinates
+                        },
+                        properties: {
+                            id: stop.id,
+                            name: stop.name
+                        },
+                    }
+                })
+            }
+        },
         getStationById: (state, getters) => id => {
-            return getters.geojson.features.find(station => {
+            return getters.stationsGeojson.features.find(station => {
                 return station.properties.id === id
             })
         }
@@ -63,6 +82,9 @@ export default new Vuex.Store({
     mutations: {
         setStations(state, stations) {
             state.stations = stations
+        },
+        setStops(state, stops) {
+            state.stops = Object.values(stops)
         }
     },
     actions: {},

@@ -19,15 +19,21 @@ export default {
         .then(() => {
           this.initMap()
         })
+
+    fetch(`https://dmtlp-mob.simetragroup.ru/rest/stop_points`, {})
+        .then(response => response.json())
+        .then(response => {
+          this.setStops(response)
+        })
   },
   methods: {
     ...mapMutations([
-      'setStations'
+      'setStations',
+      'setStops'
     ]),
     getActiveStationId(id) {
       eventBus.$emit(`onStationClick`, {
         activeStationId: id,
-        // isOpened: true
       })
     },
     initMap() {
@@ -36,18 +42,6 @@ export default {
       const map = new mapboxgl.Map({
         container: 'map', // container ID
         style: 'mapbox://styles/mapbox/streets-v11', // style URL
-        // style: {
-        //   "version": 8,
-        //   // url: 'mapbox://styles/mapbox/streets-v11',
-        //   // "name": "Mapbox Streets",
-        //   "sources": {
-        //     "mapbox-streets": {
-        //       "type": "vector",
-        //       "url": 'mapbox://styles/mapbox/streets-v11'
-        //     }
-        //   },
-        //   "layers": []
-        // },
         center: [37.6156, 55.7522],
         zoom: 10 // starting zoom
       })
@@ -57,7 +51,7 @@ export default {
 
         map.addSource(`stationsData`, {
           type: `geojson`,
-          data: this.$store.getters.geojson
+          data: this.$store.getters.stationsGeojson
         })
 
         map.addLayer({
@@ -85,14 +79,4 @@ export default {
   width: 100%;
   height: 100%;
 }
-
-
-</style>
-
-<style lang="scss">
-//.marker {
-//  background: red;
-//  border-radius: 50%;
-//  cursor: pointer;
-//}
 </style>

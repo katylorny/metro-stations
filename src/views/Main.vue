@@ -3,7 +3,24 @@
     <el-container>
       <vue-custom-scrollbar class="scroll-area">
         <el-aside>
-          <el-tree :data="stations" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+          <el-tabs v-model="activeTab">
+            <el-tab-pane label="Станции" name="stations">
+              <el-input
+                  placeholder="Поиск станций"
+                  v-model="stationsSearchInput"
+                  suffix-icon="el-icon-search"
+              />
+              <el-tree :data="stations" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+            </el-tab-pane>
+            <el-tab-pane label="Остановки" name="stops">
+              <el-input
+                  placeholder="Поиск остановок"
+                  v-model="stopsSearchInput"
+                  suffix-icon="el-icon-search"
+              />
+              <list :items="stops"/>
+            </el-tab-pane>
+          </el-tabs>
         </el-aside>
       </vue-custom-scrollbar>
       <el-main>
@@ -20,10 +37,13 @@ import Map from "../components/Map";
 import StationModal from "../components/StationModal";
 import {eventBus} from "../main";
 import vueCustomScrollbar from 'vue-custom-scrollbar'
+import {mapGetters} from "vuex";
+import List from "../components/List";
 
 export default {
   name: "Main",
   components: {
+    List,
     StationModal,
     Map,
     vueCustomScrollbar
@@ -34,11 +54,17 @@ export default {
         children: 'children',
         label: 'label'
       },
-      isModalOpened: false
+      isModalOpened: false,
+      activeTab: 'stations',
+      stationsSearchInput: '',
+      stopsSearchInput: '',
     }
   },
 
   computed: {
+    ...mapGetters([
+      'stopsGeojson'
+    ]),
     stations() {
       return this.$store.getters.stationsWithId.map((line) => {
         return {
@@ -53,6 +79,11 @@ export default {
             }
           })
         }
+      })
+    },
+    stops() {
+      return this.$store.getters.stopsGeojson.features.map(stop => {
+        return stop.properties.name
       })
     }
   },
@@ -93,6 +124,11 @@ main {
     .el-tree-node__content {
       padding: 0 20px;
     }
+
+    .el-input {
+      margin-bottom: 25px;
+    }
+
   }
 }
 
@@ -109,6 +145,7 @@ main {
 
 .scroll-area {
   height: 100vh;
-
 }
+
+
 </style>
