@@ -7,7 +7,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         stations: [],
-        stops: []
+        stops: [],
+        stopsInputValue: '',
+
         // selectedStation: {}
     },
     getters: {
@@ -50,32 +52,31 @@ export default new Vuex.Store({
                     stationsGeo.push(stationGeo)
                 })
             })
-            return ({
-                type: 'FeatureCollection',
-                features: stationsGeo
-            })
+            return stationsGeo
         },
         stopsGeojson(state) {
-            return {
-                type: 'FeatureCollection',
-                features: state.stops.map(stop => {
-                    return {
-                        type: 'Feature',
-                        geometry: {
-                            type: 'Point',
-                            coordinates: stop.geom.coordinates
-                        },
-                        properties: {
-                            id: stop.id,
-                            name: stop.name
-                        },
-                    }
-                })
-            }
+            return state.stops.map(stop => {
+                return {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: stop.geom.coordinates
+                    },
+                    properties: {
+                        id: stop.id,
+                        name: stop.name
+                    },
+                }
+            })
         },
         getStationById: (state, getters) => id => {
             return getters.stationsGeojson.features.find(station => {
                 return station.properties.id === id
+            })
+        },
+        shownStops(state, getters) {
+            return getters.stopsGeojson.filter((stop) => {
+                return stop.properties.name.indexOf(state.stopsInputValue) > -1
             })
         }
     },
@@ -85,6 +86,9 @@ export default new Vuex.Store({
         },
         setStops(state, stops) {
             state.stops = Object.values(stops)
+        },
+        setStopsInputValue(state, value) {
+            state.stopsInputValue = value
         }
     },
     actions: {},

@@ -51,7 +51,10 @@ export default {
 
         map.addSource(`stationsData`, {
           type: `geojson`,
-          data: this.$store.getters.stationsGeojson
+          data: {
+            type: 'FeatureCollection',
+            features: this.$store.getters.stationsGeojson
+          }
         })
 
         map.addLayer({
@@ -65,14 +68,17 @@ export default {
         });
 
 
-      map.on(`click`, `stations`, (e) => {
-        this.getActiveStationId(e.features[0].properties.id)
-      })
+        map.on(`click`, `stations`, (e) => {
+          this.getActiveStationId(e.features[0].properties.id)
+        })
 
-      map.addSource(`stopsData`, {
-        type: `geojson`,
-        data: this.$store.getters.stopsGeojson
-      })
+        map.addSource(`stopsData`, {
+          type: `geojson`,
+          data: {
+            type: 'FeatureCollection',
+            features: this.$store.getters.shownStops
+          }
+        })
 
         map.addLayer({
           'id': 'stops',

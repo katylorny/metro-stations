@@ -17,6 +17,7 @@
                   placeholder="Поиск остановок"
                   v-model="stopsSearchInput"
                   suffix-icon="el-icon-search"
+                  @input="onStopsInputChange"
               />
               <list :items="stops"/>
             </el-tab-pane>
@@ -27,7 +28,7 @@
         <Map/>
       </el-main>
     </el-container>
-    <station-modal title="Бибирево"/>
+    <station-modal/>
   </div>
 </template>
 
@@ -37,7 +38,7 @@ import Map from "../components/Map";
 import StationModal from "../components/StationModal";
 import {eventBus} from "../main";
 import vueCustomScrollbar from 'vue-custom-scrollbar'
-import {mapGetters} from "vuex";
+import {mapGetters, mapMutations} from "vuex";
 import List from "../components/List";
 
 export default {
@@ -82,13 +83,17 @@ export default {
       })
     },
     stops() {
-      return this.$store.getters.stopsGeojson.features.map(stop => {
+      // return this.$store.getters.stopsGeojson.features.map(stop => {
+      return this.$store.getters.shownStops.map(stop => {
         return stop.properties.name
       })
     }
   },
 
   methods: {
+    ...mapMutations([
+        'setStopsInputValue'
+    ]),
     handleNodeClick(data) {
       if (!data.children) {
         // this.isModalOpened = true
@@ -100,6 +105,10 @@ export default {
         })
       }
     },
+    onStopsInputChange() {
+      //TODO debounce?
+      this.setStopsInputValue(this.stopsSearchInput)
+    }
     // closeModal() {
     //   this.isModalOpened = false
     // }
@@ -127,6 +136,10 @@ main {
 
     .el-input {
       margin-bottom: 25px;
+    }
+
+    .el-tabs__header {
+      padding-left: 10px;
     }
 
   }
