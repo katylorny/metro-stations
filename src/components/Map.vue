@@ -63,11 +63,29 @@ export default {
             'circle-color': ["get", "color"]
           }
         });
-      });
+
 
       map.on(`click`, `stations`, (e) => {
         this.getActiveStationId(e.features[0].properties.id)
       })
+
+      map.addSource(`stopsData`, {
+        type: `geojson`,
+        data: this.$store.getters.stopsGeojson
+      })
+
+        map.addLayer({
+          'id': 'stops',
+          'type': 'circle',
+          'source': 'stopsData',
+          'paint': {
+            'circle-radius': 8,
+            'circle-color': 'black'
+          }
+        });
+
+
+      });
     },
   }
 }
