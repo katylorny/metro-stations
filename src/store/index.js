@@ -9,6 +9,7 @@ export default new Vuex.Store({
         stations: [],
         stops: [],
         stopsInputValue: '',
+        stationsInputValue: '',
 
         // selectedStation: {}
     },
@@ -78,6 +79,22 @@ export default new Vuex.Store({
             return getters.stopsGeojson.filter((stop) => {
                 return stop.properties.name.indexOf(state.stopsInputValue) > -1
             })
+        },
+        shownStations(state, getters) {
+            const filteredLines = getters.stationsWithId.filter((line) => {
+                return line.stations.some(station => station.name.indexOf(state.stationsInputValue) > -1)
+            })
+            const linesWithFilteredStations = []
+            filteredLines.forEach((lineInfo) => {
+                const lineWithFilteredStations = {
+                    ...lineInfo,
+                    stations: lineInfo.stations.filter(station => {
+                        return station.name.indexOf(state.stationsInputValue) > -1
+                    })
+                }
+                linesWithFilteredStations.push(lineWithFilteredStations)
+            })
+            return linesWithFilteredStations
         }
     },
     mutations: {
@@ -89,6 +106,9 @@ export default new Vuex.Store({
         },
         setStopsInputValue(state, value) {
             state.stopsInputValue = value
+        },
+        setStationsInputValue(state, value) {
+            state.stationsInputValue = value
         }
     },
     actions: {},

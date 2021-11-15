@@ -9,8 +9,16 @@
                   placeholder="Поиск станций"
                   v-model="stationsSearchInput"
                   suffix-icon="el-icon-search"
+                  @input="onStationsInputChange"
               />
-              <el-tree :data="stations" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+              <el-tree :data="stations"
+                       :props="defaultProps"
+                       @node-click="handleNodeClick"
+                       :default-expand-all="false"
+                       ref="tree"
+                       node-key="id"
+                       :default-expanded-keys="openedLines"
+              />
             </el-tab-pane>
             <el-tab-pane label="Остановки" name="stops">
               <el-input
@@ -59,17 +67,20 @@ export default {
       activeTab: 'stations',
       stationsSearchInput: '',
       stopsSearchInput: '',
+      openedLines: []
     }
   },
 
   computed: {
     ...mapGetters([
-      'stopsGeojson'
+      'stopsGeojson',
+      'shownStations'
     ]),
     stations() {
-      return this.$store.getters.stationsWithId.map((line) => {
+      return this.shownStations.map((line) => {
         return {
           label: line.name,
+          id: line.id,
           children: line.stations.map((station) => {
             return {
               label: station.name,
@@ -92,7 +103,8 @@ export default {
 
   methods: {
     ...mapMutations([
-        'setStopsInputValue'
+      'setStopsInputValue',
+      'setStationsInputValue'
     ]),
     handleNodeClick(data) {
       if (!data.children) {
@@ -108,10 +120,16 @@ export default {
     onStopsInputChange() {
       //TODO debounce?
       this.setStopsInputValue(this.stopsSearchInput)
+    },
+    onStationsInputChange() {
+      this.setStationsInputValue(this.stationsSearchInput)
+      this.openedLines = []
+      if (this.$store.state.stationsInputValue === "") return
+      this.stations.forEach(line => {
+        this.openedLines.push(line.id)
+      })
     }
-    // closeModal() {
-    //   this.isModalOpened = false
-    // }
+
   }
 }
 </script>
