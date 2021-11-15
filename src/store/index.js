@@ -70,7 +70,7 @@ export default new Vuex.Store({
             })
         },
         getStationById: (state, getters) => id => {
-            return getters.stationsGeojson.features.find(station => {
+            return getters.stationsGeojson.find(station => {
                 return station.properties.id === id
             })
         },
