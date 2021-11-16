@@ -30,7 +30,7 @@ export default new Vuex.Store({
         },
         stationsGeojson(state, getters) {
             const stationsGeo = []
-            getters.stationsWithId.forEach((line) => {
+            getters.shownStations.forEach((line) => {
                 line.stations.forEach((station) => {
                     const stationGeo = {
                         type: 'Feature',

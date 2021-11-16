@@ -39,10 +39,17 @@ export default {
   },
   watch: {
     shownStops: function () {
-      if (this.map.isStyleLoaded()) {
+      if (this.map && this.map.isStyleLoaded()) {
         this.map.removeLayer('stops')
         this.map.removeSource('stopsData')
         this.setStopsLayer()
+      }
+    },
+    stationsGeojson: function () {
+      if (this.map && this.map.isStyleLoaded()) {
+        this.map.removeLayer('stations')
+        this.map.removeSource('stationsData')
+        this.setStationsLayer()
       }
     }
   },
@@ -75,6 +82,33 @@ export default {
         }
       });
     },
+
+    setStationsLayer() {
+      this.map.addSource(`stationsData`, {
+        type: `geojson`,
+        data: {
+          type: 'FeatureCollection',
+          features: this.stationsGeojson
+        }
+      })
+
+      this.map.addLayer({
+        'id': 'stations',
+        'type': 'circle',
+        'layout': {
+          'visibility': 'visible'
+        },
+        'source': 'stationsData',
+        'paint': {
+          'circle-radius': 10,
+          'circle-color': ["get", "color"]
+        }
+      });
+
+      this.map.on(`click`, `stations`, (e) => {
+        this.getActiveStationId(e.features[0].properties.id)
+      })
+    },
     getActiveStationId(id) {
       eventBus.$emit(`onStationClick`, {
         activeStationId: id,
@@ -86,43 +120,17 @@ export default {
       this.map = new mapboxgl.Map({
         container: 'map', // container ID
         style: 'mapbox://styles/mapbox/streets-v11', // style URL
-        // center: [37.6156, 55.7522],
-        center: [128.218463048, 51.496981567],
+        center: [37.6156, 55.7522],
+        // center: [128.218463048, 51.496981567],
         zoom: 10 // starting zoom
       })
 
 
       this.map.on('load', () => {
-
-        this.map.addSource(`stationsData`, {
-          type: `geojson`,
-          data: {
-            type: 'FeatureCollection',
-            features: this.stationsGeojson
-          }
-        })
-
-        this.map.addLayer({
-          'id': 'stations',
-          'type': 'circle',
-          'layout': {
-            'visibility': 'visible'
-          },
-          'source': 'stationsData',
-          'paint': {
-            'circle-radius': 10,
-            'circle-color': ["get", "color"]
-          }
-        });
-
-        this.map.on(`click`, `stations`, (e) => {
-          this.getActiveStationId(e.features[0].properties.id)
-        })
-
+        this.setStationsLayer()
         this.setStopsLayer()
-
-
       });
+
       this.map.on('idle', () => {
         if (!this.map.getLayer('stops') || !this.map.getLayer('stations')) {
           return;
