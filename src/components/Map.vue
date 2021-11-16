@@ -1,5 +1,5 @@
 <template>
-  <div id="map"></div>
+    <div id="map"></div>
 </template>
 
 <script>
@@ -60,6 +60,9 @@ export default {
         map.addLayer({
           'id': 'stations',
           'type': 'circle',
+          'layout': {
+            'visibility': 'visible'
+          },
           'source': 'stationsData',
           'paint': {
             'circle-radius': 10,
@@ -83,6 +86,9 @@ export default {
         map.addLayer({
           'id': 'stops',
           'type': 'circle',
+          'layout': {
+            'visibility': 'visible'
+          },
           'source': 'stopsData',
           'paint': {
             'circle-radius': 8,
@@ -91,6 +97,54 @@ export default {
         });
 
 
+      });
+      map.on('idle', () => {
+        if (!map.getLayer('stops') || !map.getLayer('stations')) {
+          return;
+        }
+
+        const toggleableLayerIds = ['stops', 'stations'];
+
+        for (const id of toggleableLayerIds) {
+          if (document.getElementById(id)) {
+            console.log(`document.getElementById(id)`, document.getElementById(id));
+            continue;
+          }
+
+          const link = document.createElement('a');
+          link.id = id;
+          link.href = '#';
+          link.textContent = id;
+          link.className = 'active';
+
+// Show or hide layer when the toggle is clicked.
+          link.onclick = function (e) {
+            const clickedLayer = this.textContent;
+            e.preventDefault();
+            e.stopPropagation();
+
+            const visibility = map.getLayoutProperty(
+                clickedLayer,
+                'visibility'
+            );
+
+// Toggle layer visibility by changing the layout object's visibility property.
+            if (visibility === 'visible') {
+              map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+              this.className = '';
+            } else {
+              this.className = 'active';
+              map.setLayoutProperty(
+                  clickedLayer,
+                  'visibility',
+                  'visible'
+              );
+            }
+          };
+
+          const layers = document.getElementById('menu');
+          layers.appendChild(link);
+        }
       });
     },
   }
@@ -103,4 +157,5 @@ export default {
   width: 100%;
   height: 100%;
 }
+
 </style>
