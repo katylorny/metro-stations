@@ -103,7 +103,7 @@ export default {
           return;
         }
 
-        const toggleableLayerIds = ['stops', 'stations'];
+        const toggleableLayerIds = ['stations', 'stops'];
 
         for (const id of toggleableLayerIds) {
           if (document.getElementById(id)) {
@@ -145,6 +145,12 @@ export default {
           const layers = document.getElementById('menu');
           layers.appendChild(link);
         }
+      });
+      map.on('mouseenter', ['stations', 'stops'], () => {
+        map.getCanvas().style.cursor = 'pointer';
+      })
+      map.on('mouseleave', ['stations', 'stops'], () => {
+        map.getCanvas().style.cursor = '';
       });
     },
   }
