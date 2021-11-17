@@ -105,8 +105,8 @@ export default {
 
   methods: {
     ...mapMutations([
-      'setStopsInputValue',
-      'setStationsInputValue'
+      'SET_STOPS_INPUT_VALUE',
+      'SET_STATIONS_INPUT_VALUE'
     ]),
     handleNodeClick(data) {
       if (!data.children) {
@@ -121,10 +121,10 @@ export default {
     },
     onStopsInputChange() {
       //TODO debounce?
-      this.setStopsInputValue(this.stopsSearchInput)
+      this.SET_STOPS_INPUT_VALUE(this.stopsSearchInput)
     },
     onStationsInputChange() {
-      this.setStationsInputValue(this.stationsSearchInput)
+      this.SET_STATIONS_INPUT_VALUE(this.stationsSearchInput)
       this.openedLines = []
       if (this.$store.state.stationsInputValue === "") return
       this.stations.forEach(line => {

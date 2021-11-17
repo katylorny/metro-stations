@@ -19,7 +19,7 @@ export default {
     fetch(`./metro.json`)
         .then(response => response.json())
         .then((response) => {
-          this.setStations(response)
+          this.SET_STATIONS(response)
         })
         .then(() => {
           this.initMap()
@@ -28,7 +28,7 @@ export default {
     fetch(`https://dmtlp-mob.simetragroup.ru/rest/stop_points`, {})
         .then(response => response.json())
         .then(response => {
-          this.setStops(response)
+          this.SET_STOPS(response)
         })
   },
   computed: {
@@ -56,8 +56,8 @@ export default {
 
   methods: {
     ...mapMutations([
-      'setStations',
-      'setStops'
+      'SET_STATIONS',
+      'SET_STOPS'
     ]),
 
     setStopsLayer() {

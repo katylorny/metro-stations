@@ -98,16 +98,16 @@ export default new Vuex.Store({
         }
     },
     mutations: {
-        setStations(state, stations) {
+        SET_STATIONS(state, stations) {
             state.stations = stations
         },
-        setStops(state, stops) {
+        SET_STOPS(state, stops) {
             state.stops = Object.values(stops)
         },
-        setStopsInputValue(state, value) {
+        SET_STOPS_INPUT_VALUE(state, value) {
             state.stopsInputValue = value
         },
-        setStationsInputValue(state, value) {
+        SET_STATIONS_INPUT_VALUE(state, value) {
             state.stationsInputValue = value
         }
     },
