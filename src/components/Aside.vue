@@ -37,6 +37,7 @@ import List from "./List";
 import {eventBus} from "../main";
 import {mapGetters, mapMutations} from "vuex";
 import mutationTypes from "../store/mutation-types";
+import {debounce} from 'vue-debounce'
 
 export default {
   name: "Aside",
@@ -91,16 +92,20 @@ export default {
       }
     },
     onStopsInputChange() {
-      //TODO debounce?
-      this.SET_STOPS_INPUT_VALUE(this.stopsSearchInput)
+      debounce(() => {
+        this.SET_STOPS_INPUT_VALUE(this.stopsSearchInput)
+      }, 500)()
+
     },
     onStationsInputChange() {
-      this.SET_STATIONS_INPUT_VALUE(this.stationsSearchInput)
-      this.openedLines = []
-      if (this.$store.state.stationsInputValue === "") return
-      this.stations.forEach(line => {
-        this.openedLines.push(line.id)
-      })
+      debounce(() => {
+        this.SET_STATIONS_INPUT_VALUE(this.stationsSearchInput)
+        this.openedLines = []
+        if (this.$store.state.stationsInputValue === "") return
+        this.stations.forEach(line => {
+          this.openedLines.push(line.id)
+        })
+      }, 500)()
     }
   }
 }

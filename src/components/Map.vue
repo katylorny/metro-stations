@@ -1,5 +1,8 @@
 <template>
-  <div id="map"></div>
+  <div class="wrapper">
+    <div id="map"></div>
+    <div id="menu"></div>
+  </div>
 </template>
 
 <script>
@@ -192,9 +195,57 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.wrapper {
+  width: 100%;
+  height: 100%;
+}
+
 #map {
   width: 100%;
   height: 100%;
+}
+
+#menu {
+  background: #fff;
+  position: absolute;
+  z-index: 1;
+  top: 10px;
+  right: 10px;
+  border-radius: 3px;
+  width: 120px;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  font-family: 'Open Sans', sans-serif;
+
+  &::v-deep {
+    a {
+      font-size: 13px;
+      color: #404040;
+      display: block;
+      margin: 0;
+      padding: 10px;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+      text-align: center;
+    }
+
+    a:last-child {
+      border: none;
+    }
+
+    a:hover {
+      background-color: #f8f8f8;
+      color: #404040;
+    }
+
+    a.active {
+      background-color: #3887be;
+      color: #ffffff;
+    }
+
+    a.active:hover {
+      background: #3074a4;
+    }
+  }
 }
 
 </style>

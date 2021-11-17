@@ -7,6 +7,9 @@ import 'element-ui/lib/theme-chalk/index.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import InlineSvg from 'vue-inline-svg';
 import "vue-custom-scrollbar/dist/vueScrollbar.css"
+import vueDebounce from 'vue-debounce'
+
+Vue.use(vueDebounce)
 
 Vue.component('inline-svg', InlineSvg);
 Vue.use(ElementUI, { locale })
