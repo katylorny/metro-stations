@@ -97,7 +97,6 @@ export default {
       })
     },
     stops() {
-      // return this.$store.getters.stopsGeojson.features.map(stop => {
       return this.$store.getters.shownStops.map(stop => {
         return stop.properties.name
       })
@@ -111,11 +110,7 @@ export default {
     ]),
     handleNodeClick(data) {
       if (!data.children) {
-        // this.isModalOpened = true
-
-        console.log(data);
         eventBus.$emit(`onStationClick`, {
-          // isOpened: true,
           activeStationId: data.id
         })
       }
