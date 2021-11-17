@@ -6,7 +6,8 @@
             placeholder="Поиск станций"
             v-model="stationsSearchInput"
             suffix-icon="el-icon-search"
-            @input="onStationsInputChange"
+            v-debounce:300="onStationsInputChange"
+            :debounce-events="'input'"
         />
         <el-tree :data="stations"
                  :props="defaultProps"
@@ -22,7 +23,8 @@
             placeholder="Поиск остановок"
             v-model="stopsSearchInput"
             suffix-icon="el-icon-search"
-            @input="onStopsInputChange"
+            v-debounce:300="onStopsInputChange"
+            :debounce-events="'input'"
         />
         <list :items="stops"/>
       </el-tab-pane>
@@ -37,7 +39,7 @@ import List from "./List";
 import {eventBus} from "../main";
 import {mapGetters, mapMutations} from "vuex";
 import mutationTypes from "../store/mutation-types";
-import {debounce} from 'vue-debounce'
+import { getDirective } from 'vue-debounce'
 
 export default {
   name: "Aside",
@@ -53,6 +55,9 @@ export default {
       stopsSearchInput: '',
       openedLines: []
     }
+  },
+  directives: {
+    debounce: getDirective()
   },
   computed: {
     ...mapGetters([
@@ -92,20 +97,15 @@ export default {
       }
     },
     onStopsInputChange() {
-      debounce(() => {
         this.SET_STOPS_INPUT_VALUE(this.stopsSearchInput)
-      }, 500)()
-
     },
     onStationsInputChange() {
-      debounce(() => {
         this.SET_STATIONS_INPUT_VALUE(this.stationsSearchInput)
         this.openedLines = []
         if (this.$store.state.stationsInputValue === "") return
         this.stations.forEach(line => {
           this.openedLines.push(line.id)
         })
-      }, 500)()
     }
   }
 }
