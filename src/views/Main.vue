@@ -14,7 +14,7 @@
 
 <script>
 
-import Map from "../components/Map";
+import Map from "../components/map/Map";
 import StationModal from "../components/StationModal";
 import vueCustomScrollbar from 'vue-custom-scrollbar'
 import AsideComponent from "../components/Aside";

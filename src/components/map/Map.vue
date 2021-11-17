@@ -6,10 +6,10 @@
 </template>
 
 <script>
-import mapboxgl from 'mapbox-gl';
 import {mapGetters, mapMutations} from "vuex";
-import {eventBus} from "../main";
-import mutationTypes from "../store/mutation-types";
+import {eventBus} from "../../main";
+import mutationTypes from "../../store/mutation-types";
+import {initMap} from "./initMap";
 
 export default {
   name: "Map",
@@ -26,7 +26,7 @@ export default {
           this.SET_STATIONS(response)
         })
         .then(() => {
-          this.initMap()
+          initMap(this)
         })
 
     fetch(`./stops.json`, {})
@@ -117,77 +117,6 @@ export default {
       eventBus.$emit(`onStationClick`, {
         activeStationId: id,
       })
-    },
-    initMap() {
-      mapboxgl.accessToken = 'pk.eyJ1Ijoia2F0eWxvcm55IiwiYSI6ImNrdnNhZDFjcmIxczgyb3M3azl6ZG8xamEifQ.egE0UVDX4gVCMuHly5a5gw';
-
-      this.map = new mapboxgl.Map({
-        container: 'map', // container ID
-        style: 'mapbox://styles/mapbox/streets-v11', // style URL
-        center: [37.6156, 55.7522],
-        // center: [128.218463048, 51.496981567],
-        zoom: 10 // starting zoom
-      })
-
-
-      this.map.on('load', () => {
-        this.setStationsLayer()
-        this.setStopsLayer()
-      });
-
-      this.map.on('idle', () => {
-        if (!this.map.getLayer('stops') || !this.map.getLayer('stations')) {
-          return;
-        }
-
-        const toggleableLayerIds = ['stations', 'stops'];
-
-        for (const id of toggleableLayerIds) {
-          if (document.getElementById(id)) {
-            continue;
-          }
-
-          const link = document.createElement('a');
-          link.id = id;
-          link.href = '#';
-          link.textContent = id;
-          link.className = 'active';
-
-// Show or hide layer when the toggle is clicked.
-          link.onclick = (e) => {
-            const clickedLayer = link.textContent;
-            e.preventDefault();
-            e.stopPropagation();
-
-            const visibility = this.map.getLayoutProperty(
-                clickedLayer,
-                'visibility'
-            );
-
-// Toggle layer visibility by changing the layout object's visibility property.
-            if (visibility === 'visible') {
-              this.map.setLayoutProperty(clickedLayer, 'visibility', 'none');
-              link.className = '';
-            } else {
-              link.className = 'active';
-              this.map.setLayoutProperty(
-                  clickedLayer,
-                  'visibility',
-                  'visible'
-              );
-            }
-          };
-
-          const layers = document.getElementById('menu');
-          layers.appendChild(link);
-        }
-      });
-      this.map.on('mouseenter', ['stations', 'stops'], () => {
-        this.map.getCanvas().style.cursor = 'pointer';
-      })
-      this.map.on('mouseleave', ['stations', 'stops'], () => {
-        this.map.getCanvas().style.cursor = '';
-      });
     },
   }
 }
