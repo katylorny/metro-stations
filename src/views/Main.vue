@@ -2,40 +2,11 @@
   <div class="main">
     <el-container>
       <vue-custom-scrollbar class="scroll-area">
-        <el-aside>
-          <el-tabs v-model="activeTab">
-            <el-tab-pane label="Станции" name="stations">
-              <el-input
-                  placeholder="Поиск станций"
-                  v-model="stationsSearchInput"
-                  suffix-icon="el-icon-search"
-                  @input="onStationsInputChange"
-              />
-              <el-tree :data="stations"
-                       :props="defaultProps"
-                       @node-click="handleNodeClick"
-                       :default-expand-all="false"
-                       ref="tree"
-                       node-key="id"
-                       :default-expanded-keys="openedLines"
-              />
-            </el-tab-pane>
-            <el-tab-pane label="Остановки" name="stops">
-              <el-input
-                  placeholder="Поиск остановок"
-                  v-model="stopsSearchInput"
-                  suffix-icon="el-icon-search"
-                  @input="onStopsInputChange"
-              />
-              <list :items="stops"/>
-            </el-tab-pane>
-          </el-tabs>
-        </el-aside>
+        <aside-component/>
       </vue-custom-scrollbar>
       <el-main>
         <Map/>
         <div id="menu"></div>
-
       </el-main>
     </el-container>
     <station-modal/>
@@ -46,89 +17,17 @@
 
 import Map from "../components/Map";
 import StationModal from "../components/StationModal";
-import {eventBus} from "../main";
 import vueCustomScrollbar from 'vue-custom-scrollbar'
-import {mapGetters, mapMutations} from "vuex";
-import List from "../components/List";
-import mutationTypes from "../store/mutation-types";
+import AsideComponent from "../components/Aside";
 
 export default {
   name: "Main",
   components: {
-    List,
+    AsideComponent,
     StationModal,
     Map,
     vueCustomScrollbar
   },
-  data() {
-    return {
-      defaultProps: {
-        children: 'children',
-        label: 'label'
-      },
-      isModalOpened: false,
-      activeTab: 'stations',
-      stationsSearchInput: '',
-      stopsSearchInput: '',
-      openedLines: []
-    }
-  },
-
-  computed: {
-    ...mapGetters([
-      'stopsGeojson',
-      'shownStations'
-    ]),
-    stations() {
-      return this.shownStations.map((line) => {
-        return {
-          label: line.name,
-          id: line.id,
-          children: line.stations.map((station) => {
-            return {
-              label: station.name,
-              // admArea: station.admArea,
-              // district: station.district,
-              // status: station.status,
-              id: station.id
-            }
-          })
-        }
-      })
-    },
-    stops() {
-      return this.$store.getters.shownStops.map(stop => {
-        return stop.properties.name
-      })
-    }
-  },
-
-  methods: {
-    ...mapMutations([
-      mutationTypes.SET_STOPS_INPUT_VALUE,
-      mutationTypes.SET_STATIONS_INPUT_VALUE
-    ]),
-    handleNodeClick(data) {
-      if (!data.children) {
-        eventBus.$emit(`onStationClick`, {
-          activeStationId: data.id
-        })
-      }
-    },
-    onStopsInputChange() {
-      //TODO debounce?
-      this.SET_STOPS_INPUT_VALUE(this.stopsSearchInput)
-    },
-    onStationsInputChange() {
-      this.SET_STATIONS_INPUT_VALUE(this.stationsSearchInput)
-      this.openedLines = []
-      if (this.$store.state.stationsInputValue === "") return
-      this.stations.forEach(line => {
-        this.openedLines.push(line.id)
-      })
-    }
-
-  }
 }
 </script>
 
