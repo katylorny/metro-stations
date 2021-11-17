@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-    <v-main/>
+    <main-component/>
   </div>
 </template>
 
 <script>
 
-import Main from "./views/Main";
+import MainComponent from "./views/Main";
 
 export default {
   name: 'App',
   components: {
-    vMain: Main
+    MainComponent
   }
 }
 </script>

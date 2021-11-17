@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: "ListItem",
+  name: "List",
   props: {
     items: []
   }

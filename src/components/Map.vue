@@ -6,6 +6,7 @@
 import mapboxgl from 'mapbox-gl';
 import {mapGetters, mapMutations} from "vuex";
 import {eventBus} from "../main";
+import mutationTypes from "../store/mutation-types";
 
 export default {
   name: "Map",
@@ -25,7 +26,7 @@ export default {
           this.initMap()
         })
 
-    fetch(`https://dmtlp-mob.simetragroup.ru/rest/stop_points`, {})
+    fetch(`./stops.json`, {})
         .then(response => response.json())
         .then(response => {
           this.SET_STOPS(response)
@@ -56,8 +57,8 @@ export default {
 
   methods: {
     ...mapMutations([
-      'SET_STATIONS',
-      'SET_STOPS'
+      mutationTypes.SET_STATIONS,
+      mutationTypes.SET_STOPS
     ]),
 
     setStopsLayer() {

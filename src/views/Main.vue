@@ -50,6 +50,7 @@ import {eventBus} from "../main";
 import vueCustomScrollbar from 'vue-custom-scrollbar'
 import {mapGetters, mapMutations} from "vuex";
 import List from "../components/List";
+import mutationTypes from "../store/mutation-types";
 
 export default {
   name: "Main",
@@ -105,8 +106,8 @@ export default {
 
   methods: {
     ...mapMutations([
-      'SET_STOPS_INPUT_VALUE',
-      'SET_STATIONS_INPUT_VALUE'
+      mutationTypes.SET_STOPS_INPUT_VALUE,
+      mutationTypes.SET_STATIONS_INPUT_VALUE
     ]),
     handleNodeClick(data) {
       if (!data.children) {

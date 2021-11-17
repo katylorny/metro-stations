@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import uniqid from 'uniqid';
-
+import mutationTypes from "./mutation-types";
 Vue.use(Vuex)
+
 
 export default new Vuex.Store({
     state: {
@@ -10,8 +11,6 @@ export default new Vuex.Store({
         stops: [],
         stopsInputValue: '',
         stationsInputValue: '',
-
-        // selectedStation: {}
     },
     getters: {
         stationsWithId(state) {
@@ -42,7 +41,6 @@ export default new Vuex.Store({
                         },
                         properties: {
                             name: station.name,
-                            // color: line.hex_color,
                             color: `#${line.hex_color}`,
                             id: station.id,
                             admArea: station.admArea,
@@ -98,16 +96,16 @@ export default new Vuex.Store({
         }
     },
     mutations: {
-        SET_STATIONS(state, stations) {
+        [mutationTypes.SET_STATIONS](state, stations) {
             state.stations = stations
         },
-        SET_STOPS(state, stops) {
+        [mutationTypes.SET_STOPS](state, stops) {
             state.stops = Object.values(stops)
         },
-        SET_STOPS_INPUT_VALUE(state, value) {
+        [mutationTypes.SET_STOPS_INPUT_VALUE](state, value) {
             state.stopsInputValue = value
         },
-        SET_STATIONS_INPUT_VALUE(state, value) {
+        [mutationTypes.SET_STATIONS_INPUT_VALUE](state, value) {
             state.stationsInputValue = value
         }
     },

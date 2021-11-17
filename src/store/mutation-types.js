@@ -1,0 +1,7 @@
+const mutationTypes = {
+    SET_STATIONS: 'SET_STATIONS',
+    SET_STOPS: 'SET_STOPS',
+    SET_STOPS_INPUT_VALUE: 'SET_STOPS_INPUT_VALUE',
+    SET_STATIONS_INPUT_VALUE: 'SET_STATIONS_INPUT_VALUE'
+}
+export default mutationTypes
