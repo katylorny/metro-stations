@@ -8,14 +8,12 @@
         <Map/>
       </el-main>
     </el-container>
-    <station-modal/>
   </div>
 </template>
 
 <script>
 
 import Map from "../components/map/Map";
-import StationModal from "../components/StationModal";
 import vueCustomScrollbar from 'vue-custom-scrollbar'
 import AsideComponent from "../components/Aside";
 
@@ -23,7 +21,6 @@ export default {
   name: "Main",
   components: {
     AsideComponent,
-    StationModal,
     Map,
     vueCustomScrollbar
   },

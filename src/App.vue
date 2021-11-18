@@ -1,17 +1,27 @@
 <template>
   <div id="app">
     <main-component/>
+    <station-modal v-if="selectedId"/>
   </div>
 </template>
 
 <script>
 
 import MainComponent from "./views/Main";
+import StationModal from "./components/StationModal";
+import {mapState} from "vuex";
+
 
 export default {
   name: 'App',
   components: {
-    MainComponent
+    MainComponent,
+    StationModal,
+  },
+  computed: {
+    ...mapState([
+        'selectedId'
+    ])
   }
 }
 </script>

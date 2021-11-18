@@ -12,6 +12,10 @@ export default {
     },
     [mutationTypes.SET_STATIONS_INPUT_VALUE](state, value) {
         state.stationsInputValue = value
-    }
+    },
+    [mutationTypes.SET_SELECTED_ID](state, value) {
+        state.selectedId = value
+    },
+
 }
 

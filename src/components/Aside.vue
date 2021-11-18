@@ -36,10 +36,9 @@
 <script>
 
 import List from "./List";
-import {eventBus} from "../main";
 import {mapGetters, mapMutations} from "vuex";
 import mutationTypes from "../store/mutation-types";
-import { getDirective } from 'vue-debounce'
+import {getDirective} from 'vue-debounce'
 
 export default {
   name: "Aside",
@@ -87,25 +86,24 @@ export default {
   methods: {
     ...mapMutations([
       mutationTypes.SET_STOPS_INPUT_VALUE,
-      mutationTypes.SET_STATIONS_INPUT_VALUE
+      mutationTypes.SET_STATIONS_INPUT_VALUE,
+      mutationTypes.SET_SELECTED_ID
     ]),
     handleNodeClick(data) {
       if (!data.children) {
-        eventBus.$emit(`onStationClick`, {
-          activeStationId: data.id
-        })
+        this.SET_SELECTED_ID(data.id)
       }
     },
     onStopsInputChange() {
-        this.SET_STOPS_INPUT_VALUE(this.stopsSearchInput)
+      this.SET_STOPS_INPUT_VALUE(this.stopsSearchInput)
     },
     onStationsInputChange() {
-        this.SET_STATIONS_INPUT_VALUE(this.stationsSearchInput)
-        this.openedLines = []
-        if (this.$store.state.stationsInputValue === "") return
-        this.stations.forEach(line => {
-          this.openedLines.push(line.id)
-        })
+      this.SET_STATIONS_INPUT_VALUE(this.stationsSearchInput)
+      this.openedLines = []
+      if (this.$store.state.stationsInputValue === "") return
+      this.stations.forEach(line => {
+        this.openedLines.push(line.id)
+      })
     }
   }
 }

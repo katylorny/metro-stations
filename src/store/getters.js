@@ -56,9 +56,9 @@ export default {
         }
     })
 },
-    getStationById: (state, getters) => id => {
+    activeStationData: (state, getters) => {
         return getters.stationsGeojson.find(station => {
-            return station.properties.id === id
+            return station.properties.id === state.selectedId
         })
     },
         shownStops(state, getters) {

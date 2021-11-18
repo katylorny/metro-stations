@@ -7,7 +7,7 @@
 
 <script>
 import {mapGetters, mapMutations} from "vuex";
-import {eventBus} from "../../main";
+// import {eventBus} from "../../main";
 import mutationTypes from "../../store/mutation-types";
 import {initMap} from "./initMap";
 
@@ -61,7 +61,8 @@ export default {
   methods: {
     ...mapMutations([
       mutationTypes.SET_STATIONS,
-      mutationTypes.SET_STOPS
+      mutationTypes.SET_STOPS,
+      mutationTypes.SET_SELECTED_ID
     ]),
 
     setStopsLayer() {
@@ -110,12 +111,7 @@ export default {
       });
 
       this.map.on(`click`, `stations`, (e) => {
-        this.getActiveStationId(e.features[0].properties.id)
-      })
-    },
-    getActiveStationId(id) {
-      eventBus.$emit(`onStationClick`, {
-        activeStationId: id,
+        this.SET_SELECTED_ID(e.features[0].properties.id)
       })
     },
   }

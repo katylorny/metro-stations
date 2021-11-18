@@ -1,5 +1,5 @@
 <template>
-  <div class="overlay" v-if="isOpened" @click.self="closeModal">
+  <div class="overlay" @click.self="closeModal">
     <div class="modal">
       <div class="modal__header">
         <inline-svg
@@ -28,41 +28,32 @@
 </template>
 
 <script>
-import {eventBus} from "../main";
-import {mapGetters} from "vuex";
+import {mapGetters, mapState} from "vuex";
 import metroLogoImg from "../assets/img/metro-logo.svg"
+import mutationTypes from "../store/mutation-types";
 
 export default {
   name: "StationModal",
-  props: {
-    title: String
-  },
+  props: {},
   data() {
     return {
       metroLogoImg,
-      id: '',
-      isOpened: false,
-      activeStation: {},
-      // admArea: '',
-      // color: ''
     }
-  },
-  created() {
-    eventBus.$on(`onStationClick`, ({activeStationId}) => {
-      this.id = activeStationId
-      this.isOpened = true
-      this.activeStation = this.getStationById(this.id).properties
-    })
   },
   computed: {
     ...mapGetters([
-      'getStationById'
-    ])
+      'activeStationData'
+    ]),
+    ...mapState([
+      'selectedId'
+    ]),
+    activeStation() {
+      return this.activeStationData.properties
+    }
   },
   methods: {
     closeModal() {
-      this.isOpened = false
-      // this.$emit(`close`)
+      this.$store.commit(mutationTypes.SET_SELECTED_ID, null)
     }
   }
 }
