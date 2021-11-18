@@ -12,6 +12,7 @@
 import {mapGetters, mapMutations} from "vuex";
 import mutationTypes from "../../store/mutation-types";
 import {initMap} from "./initMap";
+import {mapActions} from "vuex";
 
 export default {
   name: "Map",
@@ -22,20 +23,8 @@ export default {
     }
   },
   mounted() {
-    fetch(`./metro.json`)
-        .then(response => response.json())
-        .then((response) => {
-          this.SET_STATIONS(response)
-        })
-        .then(() => {
-          initMap(this)
-        })
-
-    fetch(`./stops.json`, {})
-        .then(response => response.json())
-        .then(response => {
-          this.SET_STOPS(response)
-        })
+    this.loadData()
+    initMap(this)
   },
   computed: {
     ...mapGetters([
@@ -65,6 +54,10 @@ export default {
       mutationTypes.SET_STATIONS,
       mutationTypes.SET_STOPS,
       mutationTypes.SET_SELECTED_ID
+    ]),
+
+    ...mapActions([
+      'loadData'
     ]),
 
     setStopsLayer() {

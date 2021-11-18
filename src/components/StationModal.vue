@@ -34,7 +34,9 @@ import mutationTypes from "../store/mutation-types";
 
 export default {
   name: "StationModal",
-  props: {},
+  props: {
+    type: String,
+  },
   data() {
     return {
       metroLogoImg,
