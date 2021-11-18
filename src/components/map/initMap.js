@@ -16,53 +16,6 @@ export const initMap = (component) => {
         component.setStopsLayer()
     });
 
-    component.map.on('idle', () => {
-        if (!component.map.getLayer('stops') || !component.map.getLayer('stations')) {
-            return;
-        }
-
-        const toggleableLayerIds = ['stations', 'stops'];
-
-        for (const id of toggleableLayerIds) {
-            if (document.getElementById(id)) {
-                continue;
-            }
-
-            const link = document.createElement('a');
-            link.id = id;
-            link.href = '#';
-            link.textContent = id;
-            link.className = 'active';
-
-// Show or hide layer when the toggle is clicked.
-            link.onclick = (e) => {
-                const clickedLayer = link.textContent;
-                e.preventDefault();
-                e.stopPropagation();
-
-                const visibility = component.map.getLayoutProperty(
-                    clickedLayer,
-                    'visibility'
-                );
-
-// Toggle layer visibility by changing the layout object's visibility property.
-                if (visibility === 'visible') {
-                    component.map.setLayoutProperty(clickedLayer, 'visibility', 'none');
-                    link.className = '';
-                } else {
-                    link.className = 'active';
-                    component.map.setLayoutProperty(
-                        clickedLayer,
-                        'visibility',
-                        'visible'
-                    );
-                }
-            };
-
-            const layers = document.getElementById('menu');
-            layers.appendChild(link);
-        }
-    });
     component.map.on('mouseenter', ['stations', 'stops'], () => {
         component.map.getCanvas().style.cursor = 'pointer';
     })

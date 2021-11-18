@@ -1,13 +1,15 @@
 <template>
   <div class="wrapper">
     <div id="map"></div>
-    <div id="menu"></div>
+    <div id="menu">
+      <a class="active" href="#" id="stations" @click="onLayerToggleClick">Станции метро</a>
+      <a class="active" href="#" id="stops" @click="onLayerToggleClick">Остановки</a>
+    </div>
   </div>
 </template>
 
 <script>
 import {mapGetters, mapMutations} from "vuex";
-// import {eventBus} from "../../main";
 import mutationTypes from "../../store/mutation-types";
 import {initMap} from "./initMap";
 
@@ -114,6 +116,26 @@ export default {
         this.SET_SELECTED_ID(e.features[0].properties.id)
       })
     },
+
+    onLayerToggleClick(e) {
+      const clickedLayer = e.target.id
+      const link = e.target
+      const visibility = this.map.getLayoutProperty(
+          clickedLayer,
+          'visibility'
+      );
+      if (visibility === 'visible') {
+        this.map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+        link.className = '';
+      } else {
+        link.className = 'active';
+        this.map.setLayoutProperty(
+            clickedLayer,
+            'visibility',
+            'visible'
+        );
+      }
+    }
   }
 }
 
