@@ -16,6 +16,9 @@ export default {
     [mutationTypes.SET_SELECTED_ID](state, value) {
         state.selectedId = value
     },
+    [mutationTypes.SET_SELECTED_TYPE] (state, type) {
+        state.selectedType = type
+    }
 
 }
 

@@ -7,6 +7,7 @@ export const initMap = (component) => {
         container: 'map', // container ID
         style: 'mapbox://styles/mapbox/streets-v11', // style URL
         center: [37.6156, 55.7522],
+        // center: [128.218247267,51.496981999],
         zoom: 10 // starting zoom
     })
 

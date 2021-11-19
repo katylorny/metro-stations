@@ -3,5 +3,6 @@ export default {
     stops: [],
     stopsInputValue: '',
     stationsInputValue: '',
-    selectedId: null
+    selectedId: null,
+    selectedType: ''
 }

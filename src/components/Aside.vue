@@ -26,7 +26,10 @@
             v-debounce:300="onStopsInputChange"
             :debounce-events="'input'"
         />
-        <list :items="stops"/>
+        <list
+            :items="stops"
+            @click="handleStopClick"
+        />
       </el-tab-pane>
     </el-tabs>
   </el-aside>
@@ -79,7 +82,10 @@ export default {
     },
     stops() {
       return this.$store.getters.shownStops.map(stop => {
-        return stop.properties.name
+        return {
+          name: stop.properties.name,
+          id: stop.properties.id
+        }
       })
     }
   },
@@ -87,11 +93,17 @@ export default {
     ...mapMutations([
       mutationTypes.SET_STOPS_INPUT_VALUE,
       mutationTypes.SET_STATIONS_INPUT_VALUE,
-      mutationTypes.SET_SELECTED_ID
+      mutationTypes.SET_SELECTED_ID,
+      mutationTypes.SET_SELECTED_TYPE
     ]),
+    handleStopClick(id) {
+      this.SET_SELECTED_ID(id)
+      this.SET_SELECTED_TYPE('stops')
+    },
     handleNodeClick(data) {
       if (!data.children) {
         this.SET_SELECTED_ID(data.id)
+        this.SET_SELECTED_TYPE('stations')
       }
     },
     onStopsInputChange() {

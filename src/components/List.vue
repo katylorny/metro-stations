@@ -1,7 +1,13 @@
 <template>
   <ul class="list">
-    <li v-for="(item, i) in items" class="list__item" :key="i">
-      {{ item }}
+    <li
+        v-for="(item, i) in items"
+        :id="item.id"
+        class="list__item"
+        :key="i"
+        @click="$emit(`click`, item.id)"
+    >
+      {{ item.name }}
     </li>
   </ul>
 

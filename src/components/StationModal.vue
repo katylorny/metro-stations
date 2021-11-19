@@ -1,6 +1,6 @@
 <template>
   <div class="overlay" @click.self="closeModal">
-    <div class="modal">
+    <div v-if="selectedType === 'stations'" class="modal modal--stations">
       <div class="modal__header">
         <inline-svg
             :src="metroLogoImg"
@@ -24,6 +24,22 @@
       </div>
 
     </div>
+    <div v-if="selectedType === 'stops'" class="modal modal--stops">
+      <div class="modal__header">
+        <h1 class="modal__title modal__title--stop">
+          {{ activeStop.name }}
+        </h1>
+        <button class="modal__close-button" @click="closeModal">
+          <i class="el-icon-close"></i>
+        </button>
+      </div>
+
+      <div class="modal__main">
+        <p>Адрес: {{ activeStop.address }}</p>
+        <p> ID: {{ activeStop.id }}</p>
+      </div>
+
+    </div>
   </div>
 </template>
 
@@ -34,9 +50,6 @@ import mutationTypes from "../store/mutation-types";
 
 export default {
   name: "StationModal",
-  props: {
-    type: String,
-  },
   data() {
     return {
       metroLogoImg,
@@ -44,13 +57,18 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'activeStationData'
+      'activeStationData',
+      'activeStopData'
     ]),
     ...mapState([
-      'selectedId'
+      'selectedId',
+      'selectedType'
     ]),
     activeStation() {
       return this.activeStationData.properties
+    },
+    activeStop() {
+      return this.activeStopData.properties
     }
   },
   methods: {
@@ -93,6 +111,10 @@ export default {
   font-size: 18px;
   margin-left: 8px;
   margin-top: 16px;
+}
+
+.modal__title--stop {
+  margin-left: 0;
 }
 
 .modal__close-button {
