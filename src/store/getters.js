@@ -59,12 +59,12 @@ export default {
     },
     activeStationData: (state, getters) => {
         return getters.stationsGeojson.find(station => {
-            return station.properties.id === state.selectedId
+            return station.properties.id === state.selectedStationId
         })
     },
     activeStopData(state, getters) {
         return getters.shownStops.find(stop => {
-            return stop.properties.id === state.selectedId
+            return stop.properties.id === state.selectedStopId
         })
     },
     shownStops(state, getters) {

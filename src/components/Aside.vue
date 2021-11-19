@@ -93,16 +93,17 @@ export default {
     ...mapMutations([
       mutationTypes.SET_STOPS_INPUT_VALUE,
       mutationTypes.SET_STATIONS_INPUT_VALUE,
-      mutationTypes.SET_SELECTED_ID,
+      mutationTypes.SET_SELECTED_STATION_ID,
+      mutationTypes.SET_SELECTED_STOP_ID,
       mutationTypes.SET_SELECTED_TYPE
     ]),
     handleStopClick(id) {
-      this.SET_SELECTED_ID(id)
+      this.SET_SELECTED_STOP_ID(id)
       this.SET_SELECTED_TYPE('stops')
     },
     handleNodeClick(data) {
       if (!data.children) {
-        this.SET_SELECTED_ID(data.id)
+        this.SET_SELECTED_STATION_ID(data.id)
         this.SET_SELECTED_TYPE('stations')
       }
     },

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <main-component/>
-    <station-modal v-if="selectedId"/>
+    <station-modal v-if="selectedStationId || selectedStopId"/>
   </div>
 </template>
 
@@ -20,7 +20,8 @@ export default {
   },
   computed: {
     ...mapState([
-        'selectedId'
+        'selectedStopId',
+        'selectedStationId'
     ])
   }
 }

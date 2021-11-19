@@ -53,7 +53,8 @@ export default {
     ...mapMutations([
       mutationTypes.SET_STATIONS,
       mutationTypes.SET_STOPS,
-      mutationTypes.SET_SELECTED_ID,
+      mutationTypes.SET_SELECTED_STATION_ID,
+      mutationTypes.SET_SELECTED_STOP_ID,
       mutationTypes.SET_SELECTED_TYPE
     ]),
 
@@ -89,7 +90,7 @@ export default {
         });
 
         this.map.on(`click`, `stops`, (e) => {
-          this.SET_SELECTED_ID(e.features[0].properties.id)
+          this.SET_SELECTED_STOP_ID(e.features[0].properties.id)
           this.SET_SELECTED_TYPE('stops')
         })
       }
@@ -123,7 +124,7 @@ export default {
         });
 
         this.map.on(`click`, `stations`, (e) => {
-          this.SET_SELECTED_ID(e.features[0].properties.id)
+          this.SET_SELECTED_STATION_ID(e.features[0].properties.id)
           this.SET_SELECTED_TYPE('stations')
         })
       }

@@ -61,7 +61,7 @@ export default {
       'activeStopData'
     ]),
     ...mapState([
-      'selectedId',
+      'selectedStationIdId',
       'selectedType'
     ]),
     activeStation() {
@@ -73,7 +73,8 @@ export default {
   },
   methods: {
     closeModal() {
-      this.$store.commit(mutationTypes.SET_SELECTED_ID, null)
+      this.$store.commit(mutationTypes.SET_SELECTED_STOP_ID, null)
+      this.$store.commit(mutationTypes.SET_SELECTED_STATION_ID, null)
     }
   }
 }
