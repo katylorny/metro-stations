@@ -11,7 +11,7 @@ export default {
         fetch(`./stops.json`, {})
             .then(response => response.json())
             .then(response => {
-              commit(mutationTypes.SET_STOPS, response)
+                commit(mutationTypes.SET_STOPS, response)
             })
     }
 }

@@ -90,6 +90,7 @@ export default {
         });
 
         this.map.on(`click`, `stops`, (e) => {
+          console.log(1);
           this.SET_SELECTED_STOP_ID(e.features[0].properties.id)
           this.SET_SELECTED_TYPE('stops')
         })

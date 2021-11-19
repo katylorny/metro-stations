@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <main-component/>
-    <station-modal v-if="selectedStationId || selectedStopId"/>
+    <station-modal/>
   </div>
 </template>
 
@@ -9,7 +9,6 @@
 
 import MainComponent from "./views/Main";
 import StationModal from "./components/StationModal";
-import {mapState} from "vuex";
 
 
 export default {
@@ -17,12 +16,6 @@ export default {
   components: {
     MainComponent,
     StationModal,
-  },
-  computed: {
-    ...mapState([
-        'selectedStopId',
-        'selectedStationId'
-    ])
   }
 }
 </script>

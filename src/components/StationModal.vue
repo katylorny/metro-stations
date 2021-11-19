@@ -1,6 +1,6 @@
 <template>
-  <div class="overlay" @click.self="closeModal">
-    <div v-if="selectedType === 'stations'" class="modal modal--stations">
+  <el-dialog :visible.sync="isVisible" class="modal">
+    <div v-if="selectedType === 'stations'" class="modal__body modal__body--stations">
       <div class="modal__header">
         <inline-svg
             :src="metroLogoImg"
@@ -12,9 +12,6 @@
         <h1 class="modal__title">
           {{ activeStation.name }}
         </h1>
-        <button class="modal__close-button" @click="closeModal">
-          <i class="el-icon-close"></i>
-        </button>
       </div>
 
       <div class="modal__main">
@@ -24,14 +21,14 @@
       </div>
 
     </div>
-    <div v-if="selectedType === 'stops'" class="modal modal--stops">
+    <div v-if="selectedType === 'stops'" class="modal__body modal__body--stops">
       <div class="modal__header">
         <h1 class="modal__title modal__title--stop">
           {{ activeStop.name }}
         </h1>
-        <button class="modal__close-button" @click="closeModal">
-          <i class="el-icon-close"></i>
-        </button>
+        <!--        <button class="modal__close-button" @click="closeModal">-->
+        <!--          <i class="el-icon-close"></i>-->
+        <!--        </button>-->
       </div>
 
       <div class="modal__main">
@@ -40,11 +37,13 @@
       </div>
 
     </div>
-  </div>
+  </el-dialog>
+
+
 </template>
 
 <script>
-import {mapGetters, mapState} from "vuex";
+import {mapGetters, mapMutations, mapState} from "vuex";
 import metroLogoImg from "../assets/img/metro-logo.svg"
 import mutationTypes from "../store/mutation-types";
 
@@ -61,44 +60,45 @@ export default {
       'activeStopData'
     ]),
     ...mapState([
-      'selectedStationIdId',
+      'selectedStationId',
+      'selectedStopId',
       'selectedType'
     ]),
     activeStation() {
-      return this.activeStationData.properties
+      return this.activeStationData && this.activeStationData.properties
     },
     activeStop() {
-      return this.activeStopData.properties
+      return this.activeStopData && this.activeStopData.properties
+    },
+    isVisible: {
+      get() {
+        return !!(this.selectedStopId || this.selectedStationId)
+      },
+      set() {
+        this.SET_SELECTED_TYPE(null)
+        this.SET_SELECTED_STATION_ID(null)
+        this.SET_SELECTED_STOP_ID(null)
+      }
     }
   },
   methods: {
-    closeModal() {
-      this.$store.commit(mutationTypes.SET_SELECTED_STOP_ID, null)
-      this.$store.commit(mutationTypes.SET_SELECTED_STATION_ID, null)
-    }
+    ...mapMutations([
+      mutationTypes.SET_SELECTED_TYPE,
+      mutationTypes.SET_SELECTED_STATION_ID,
+      mutationTypes.SET_SELECTED_STOP_ID,
+    ])
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.overlay {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(128, 128, 128, 0.55);
-  position: absolute;
-  top: 0;
-  left: 0;
-}
 
 .modal {
-  min-width: 500px;
-  background: white;
-  padding: 20px;
-  min-height: 200px;
-  border-radius: 6px;
+  &::v-deep {
+    .el-dialog__body {
+      padding-top: 0;
+    }
+  }
 }
 
 .modal__header {
@@ -114,26 +114,9 @@ export default {
   margin-top: 16px;
 }
 
-.modal__title--stop {
-  margin-left: 0;
-}
-
-.modal__close-button {
-  padding: 0;
-  margin-left: auto;
-  cursor: pointer;
-  border: none;
-  height: 20px;
-  width: 20px;
-  background: transparent;
-  transition: all 0.2s ease;
-
-  i {
-    font-size: 20px;
-  }
-
-  &:hover {
-    transform: scale(1.3);
+.modal__body--stops {
+  .modal__title {
+    margin-left: 0;
   }
 }
 
@@ -146,4 +129,6 @@ export default {
     margin-top: 0;
   }
 }
+
+
 </style>
