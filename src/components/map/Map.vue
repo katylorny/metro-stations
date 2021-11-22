@@ -13,6 +13,7 @@ import {mapGetters, mapMutations} from "vuex";
 import mutationTypes from "../../store/helpers/mutation-types";
 import {initMap} from "./core/initMap";
 import {mapActions} from "vuex";
+import {layersConfig} from "./configs";
 
 export default {
   name: "Map",
@@ -35,16 +36,19 @@ export default {
   watch: {
     shownStops: function () {
       if (this.map && this.map.isStyleLoaded()) {
+        console.log(1);
         this.map.removeLayer('stops')
         this.map.removeSource('stopsData')
-        this.setStopsLayer()
+        this.setLayer('stops')
+        // this.setStopsLayer()
       }
     },
     stationsGeojson: function () {
       if (this.map && this.map.isStyleLoaded()) {
         this.map.removeLayer('stations')
         this.map.removeSource('stationsData')
-        this.setStationsLayer()
+        this.setLayer('stations')
+        // this.setStationsLayer()
       }
     }
   },
@@ -62,71 +66,48 @@ export default {
       'loadData'
     ]),
 
-    setStopsLayer() {
-      const source = this.map.getSource('stopsData')
+    setLayer(type) {
+      const source = this.map.getSource(`${type}Data`)
+      let features
+      switch (type) {
+        case 'stations':
+          features = this.stationsGeojson
+          break
+        case 'stops':
+          features = this.shownStops
+          break
+      }
+
       const geoJson = {
         type: `geojson`,
         data: {
           type: 'FeatureCollection',
-          features: this.shownStops
-        }
-      }
-      if (source) {
-        source.setData(geoJson)
-      } else {
-        this.map.addSource(`stopsData`, geoJson)
-
-        this.map.addLayer({
-          'id': 'stops',
-          'type': 'circle',
-          'layout': {
-            'visibility': 'visible'
-          },
-          'source': 'stopsData',
-          'paint': {
-            'circle-radius': 8,
-            'circle-color': 'black'
-          }
-        });
-
-        this.map.on(`click`, `stops`, (e) => {
-          console.log(1);
-          this.SET_SELECTED_STOP_ID(e.features[0].properties.id)
-          this.SET_SELECTED_TYPE('stops')
-        })
-      }
-    },
-
-    setStationsLayer() {
-      const source = this.map.getSource('stationsData')
-      const geoJson = {
-        type: `geojson`,
-        data: {
-          type: 'FeatureCollection',
-          features: this.stationsGeojson
+          features: features
         }
       }
 
       if (source) {
         source.setData(geoJson)
       } else {
-        this.map.addSource(`stationsData`, geoJson)
-        this.map.addLayer({
-          'id': 'stations',
-          'type': 'circle',
-          'layout': {
-            'visibility': 'visible'
-          },
-          'source': 'stationsData',
-          'paint': {
-            'circle-radius': 10,
-            'circle-color': ["get", "color"]
-          }
-        });
+        this.map.addSource(`${type}Data`, geoJson)
+        const options = {
+          // source: `${type}Data`,
+          ...layersConfig[type]
+        }
 
-        this.map.on(`click`, `stations`, (e) => {
-          this.SET_SELECTED_STATION_ID(e.features[0].properties.id)
-          this.SET_SELECTED_TYPE('stations')
+        this.map.addLayer(options);
+
+        this.map.on(`click`, type, (e) => {
+
+          switch (type) {
+            case 'stations':
+              this.SET_SELECTED_STATION_ID(e.features[0].properties.id)
+              break
+            case 'stops':
+              this.SET_SELECTED_STOP_ID(e.features[0].properties.id)
+              break
+          }
+          this.SET_SELECTED_TYPE(type)
         })
       }
     },

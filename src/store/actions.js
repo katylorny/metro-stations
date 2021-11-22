@@ -1,9 +1,10 @@
 import mutationTypes from "./helpers/mutation-types";
+const {SET_IS_LOADING, SET_STATIONS, SET_STOPS,SET_IS_ERROR} = mutationTypes
 
 export default {
     async loadData({commit}) {
         try {
-            commit(mutationTypes.SET_IS_LOADING, true)
+            commit(SET_IS_LOADING, true)
 
             await new Promise(resolve => {
                 setTimeout(resolve, 1000)
@@ -17,14 +18,14 @@ export default {
             const stationsResult = await stationsData.json()
             const stopsResult = await stopsData.json()
 
-            commit(mutationTypes.SET_STATIONS, stationsResult)
-            commit(mutationTypes.SET_STOPS, stopsResult)
-            commit(mutationTypes.SET_IS_LOADING, false)
+            commit(SET_STATIONS, stationsResult)
+            commit(SET_STOPS, stopsResult)
+            commit(SET_IS_LOADING, false)
 
         } catch (err) {
             console.log(`err`, err);
-            commit(mutationTypes.SET_IS_LOADING, false)
-            commit(mutationTypes.SET_IS_ERROR, true)
+            commit(SET_IS_LOADING, false)
+            commit(SET_IS_ERROR, true)
         }
     }
 }

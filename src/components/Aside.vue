@@ -9,17 +9,9 @@
             v-debounce:300="onStationsInputChange"
             :debounce-events="'input'"
         />
-        <!--        <el-tree :data="stations"-->
-        <!--                 :props="defaultProps"-->
-        <!--                 @node-click="handleNodeClick"-->
-        <!--                 :default-expand-all="false"-->
-        <!--                 ref="tree"-->
-        <!--                 node-key="id"-->
-        <!--                 :default-expanded-keys="openedLines"-->
-        <!--        />-->
         <list
             :items="stations"
-            @item-click="handleStationClick"
+            @item-click="handleItemClick($event, 'stations')"
         />
       </el-tab-pane>
       <el-tab-pane label="Остановки" name="stops">
@@ -32,7 +24,7 @@
         />
         <list
             :items="stops"
-            @item-click="handleStopClick"
+            @item-click="handleItemClick($event, 'stops')"
         />
       </el-tab-pane>
     </el-tabs>
@@ -101,13 +93,16 @@ export default {
       mutationTypes.SET_SELECTED_STOP_ID,
       mutationTypes.SET_SELECTED_TYPE
     ]),
-    handleStopClick(id) {
-      this.SET_SELECTED_STOP_ID(id)
-      this.SET_SELECTED_TYPE('stops')
-    },
-    handleStationClick(id) {
-      this.SET_SELECTED_STATION_ID(id)
-      this.SET_SELECTED_TYPE('stations')
+    handleItemClick(id, type) {
+      switch (type) {
+        case 'stations':
+          this.SET_SELECTED_STATION_ID(id)
+          break
+        case 'stops':
+          this.SET_SELECTED_STOP_ID(id)
+          break
+      }
+      this.SET_SELECTED_TYPE(type)
     },
     onStopsInputChange() {
       this.SET_STOPS_INPUT_VALUE(this.stopsSearchInput)
