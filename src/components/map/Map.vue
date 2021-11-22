@@ -2,8 +2,15 @@
   <div class="wrapper">
     <div id="map"></div>
     <div id="menu">
-      <a class="active" href="#" id="stations" @click="onLayerToggleClick">Станции метро</a>
-      <a class="active" href="#" id="stops" @click="onLayerToggleClick">Остановки</a>
+      <a v-for="(layer, i) in layers"
+         :key="i"
+         href="#"
+         :class="layer.isActive ? 'active' : ''"
+         :id="layer.id"
+         @click="onLayerToggleClick(layer)"
+      >
+        {{ layer.name }}
+      </a>
     </div>
   </div>
 </template>
@@ -20,7 +27,19 @@ export default {
 
   data() {
     return {
-      map: null
+      map: null,
+      layers: [
+        {
+          id: 'stations',
+          name: 'Станции метро',
+          isActive: true
+        },
+        {
+          id: 'stops',
+          name: 'Остановки',
+          isActive: true
+        }
+      ]
     }
   },
   async mounted() {
@@ -112,24 +131,13 @@ export default {
       }
     },
 
-    onLayerToggleClick(e) {
-      const clickedLayer = e.target.id
-      const link = e.target
-      const visibility = this.map.getLayoutProperty(
-          clickedLayer,
-          'visibility'
+    onLayerToggleClick(layer) {
+      layer.isActive = !layer.isActive
+      this.map.setLayoutProperty(
+          layer.id,
+          'visibility',
+          layer.isActive ? 'visible' : 'none'
       );
-      if (visibility === 'visible') {
-        this.map.setLayoutProperty(clickedLayer, 'visibility', 'none');
-        link.className = '';
-      } else {
-        link.className = 'active';
-        this.map.setLayoutProperty(
-            clickedLayer,
-            'visibility',
-            'visible'
-        );
-      }
     }
   }
 }
