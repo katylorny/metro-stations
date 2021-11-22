@@ -1,17 +1,7 @@
 <template>
   <div class="wrapper">
     <div id="map"></div>
-    <div id="menu">
-      <a v-for="(layer, i) in layers"
-         :key="i"
-         href="#"
-         :class="layer.isActive ? 'active' : ''"
-         :id="layer.id"
-         @click="onLayerToggleClick(layer)"
-      >
-        {{ layer.name }}
-      </a>
-    </div>
+    <layers-visibility :layers="layers" @click="onLayerToggleClick"/>
   </div>
 </template>
 
@@ -26,10 +16,11 @@ import {
   SET_STATIONS,
   SET_STOPS
 } from "../../store/helpers/mutation-types";
+import LayersVisibility from "../LayersVisibility";
 
 export default {
   name: "Map",
-
+  components: {LayersVisibility},
   data() {
     return {
       map: null,
@@ -60,7 +51,6 @@ export default {
   watch: {
     shownStops: function () {
       if (this.map && this.map.isStyleLoaded()) {
-        console.log(1);
         this.map.removeLayer('stops')
         this.map.removeSource('stopsData')
         this.setLayer('stops')
