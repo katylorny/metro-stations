@@ -36,8 +36,12 @@
 
 import List from "./List";
 import {mapGetters, mapMutations} from "vuex";
-import mutationTypes from "../store/helpers/mutation-types";
 import {getDirective} from 'vue-debounce'
+import {
+  SET_SELECTED_STATION_ID, SET_SELECTED_STOP_ID, SET_SELECTED_TYPE,
+  SET_STATIONS_INPUT_VALUE,
+  SET_STOPS_INPUT_VALUE
+} from "../store/helpers/mutation-types";
 
 export default {
   name: "Aside",
@@ -87,11 +91,11 @@ export default {
   },
   methods: {
     ...mapMutations([
-      mutationTypes.SET_STOPS_INPUT_VALUE,
-      mutationTypes.SET_STATIONS_INPUT_VALUE,
-      mutationTypes.SET_SELECTED_STATION_ID,
-      mutationTypes.SET_SELECTED_STOP_ID,
-      mutationTypes.SET_SELECTED_TYPE
+      SET_STOPS_INPUT_VALUE,
+      SET_STATIONS_INPUT_VALUE,
+      SET_SELECTED_STATION_ID,
+      SET_SELECTED_STOP_ID,
+      SET_SELECTED_TYPE
     ]),
     handleItemClick(id, type) {
       switch (type) {

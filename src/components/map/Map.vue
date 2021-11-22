@@ -17,10 +17,15 @@
 
 <script>
 import {mapGetters, mapMutations} from "vuex";
-import mutationTypes from "../../store/helpers/mutation-types";
 import {initMap} from "./core/initMap";
 import {mapActions} from "vuex";
 import {layersConfig} from "./configs";
+import {
+  SET_SELECTED_STATION_ID,
+  SET_SELECTED_STOP_ID, SET_SELECTED_TYPE,
+  SET_STATIONS,
+  SET_STOPS
+} from "../../store/helpers/mutation-types";
 
 export default {
   name: "Map",
@@ -74,11 +79,11 @@ export default {
 
   methods: {
     ...mapMutations([
-      mutationTypes.SET_STATIONS,
-      mutationTypes.SET_STOPS,
-      mutationTypes.SET_SELECTED_STATION_ID,
-      mutationTypes.SET_SELECTED_STOP_ID,
-      mutationTypes.SET_SELECTED_TYPE
+      SET_STATIONS,
+      SET_STOPS,
+      SET_SELECTED_STATION_ID,
+      SET_SELECTED_STOP_ID,
+      SET_SELECTED_TYPE
     ]),
 
     ...mapActions([

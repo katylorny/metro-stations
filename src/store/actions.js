@@ -1,6 +1,4 @@
-import mutationTypes from "./helpers/mutation-types";
-
-const {SET_IS_LOADING, SET_STATIONS, SET_STOPS, SET_IS_ERROR} = mutationTypes
+import {SET_IS_LOADING, SET_STATIONS, SET_STOPS, SET_IS_ERROR} from './helpers/mutation-types'
 
 export default {
     async loadData({commit}) {

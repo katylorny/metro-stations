@@ -42,7 +42,7 @@
 <script>
 import {mapGetters, mapMutations, mapState} from "vuex";
 import metroLogoImg from "../assets/img/metro-logo.svg"
-import mutationTypes from "../store/helpers/mutation-types";
+import {SET_SELECTED_STATION_ID, SET_SELECTED_STOP_ID, SET_SELECTED_TYPE} from "../store/helpers/mutation-types";
 
 export default {
   name: "StationModal",
@@ -80,9 +80,9 @@ export default {
   },
   methods: {
     ...mapMutations([
-      mutationTypes.SET_SELECTED_TYPE,
-      mutationTypes.SET_SELECTED_STATION_ID,
-      mutationTypes.SET_SELECTED_STOP_ID,
+      SET_SELECTED_TYPE,
+      SET_SELECTED_STATION_ID,
+      SET_SELECTED_STOP_ID,
     ])
   }
 }
