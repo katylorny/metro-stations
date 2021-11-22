@@ -2,6 +2,7 @@
   <div id="app">
     <main-component/>
     <station-modal/>
+    <overlay v-if="isLoading || isError"/>
   </div>
 </template>
 
@@ -9,13 +10,22 @@
 
 import MainComponent from "./views/Main";
 import StationModal from "./components/StationModal";
+import Overlay from "./components/Overlay";
+import {mapState} from "vuex";
 
 
 export default {
   name: 'App',
   components: {
+    Overlay,
     MainComponent,
     StationModal,
+  },
+  computed: {
+    ...mapState([
+        'isError',
+        'isLoading'
+    ])
   }
 }
 </script>
@@ -40,4 +50,5 @@ body {
   flex-direction: column;
   min-height: 100vh;
 }
+
 </style>

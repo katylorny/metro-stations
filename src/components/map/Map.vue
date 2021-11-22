@@ -10,8 +10,8 @@
 
 <script>
 import {mapGetters, mapMutations} from "vuex";
-import mutationTypes from "../../store/mutation-types";
-import {initMap} from "./initMap";
+import mutationTypes from "../../store/helpers/mutation-types";
+import {initMap} from "./core/initMap";
 import {mapActions} from "vuex";
 
 export default {

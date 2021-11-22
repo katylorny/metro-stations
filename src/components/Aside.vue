@@ -44,7 +44,7 @@
 
 import List from "./List";
 import {mapGetters, mapMutations} from "vuex";
-import mutationTypes from "../store/mutation-types";
+import mutationTypes from "../store/helpers/mutation-types";
 import {getDirective} from 'vue-debounce'
 
 export default {

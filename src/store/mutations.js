@@ -1,4 +1,4 @@
-import mutationTypes from "./mutation-types";
+import mutationTypes from "./helpers/mutation-types";
 
 export default {
     [mutationTypes.SET_STATIONS](state, stations) {
@@ -21,7 +21,12 @@ export default {
     },
     [mutationTypes.SET_SELECTED_TYPE] (state, type) {
         state.selectedType = type
-    }
-
+    },
+    [mutationTypes.SET_IS_LOADING] (state, isLoading) {
+        state.isLoading = isLoading
+    },
+    [mutationTypes.SET_IS_ERROR] (state, isError) {
+        state.isError = isError
+    },
 }
 

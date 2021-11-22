@@ -26,9 +26,6 @@
         <h1 class="modal__title modal__title--stop">
           {{ activeStop.name }}
         </h1>
-        <!--        <button class="modal__close-button" @click="closeModal">-->
-        <!--          <i class="el-icon-close"></i>-->
-        <!--        </button>-->
       </div>
 
       <div class="modal__main">
@@ -45,7 +42,7 @@
 <script>
 import {mapGetters, mapMutations, mapState} from "vuex";
 import metroLogoImg from "../assets/img/metro-logo.svg"
-import mutationTypes from "../store/mutation-types";
+import mutationTypes from "../store/helpers/mutation-types";
 
 export default {
   name: "StationModal",
