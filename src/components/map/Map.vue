@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import {mapGetters, mapMutations} from "vuex";
+import {mapGetters, mapMutations, mapState} from "vuex";
 import {initMap} from "./core/initMap";
 import {mapActions} from "vuex";
 import {layersConfig} from "./configs";
@@ -43,6 +43,9 @@ export default {
     initMap(this)
   },
   computed: {
+    ...mapState([
+      'selectedType'
+    ]),
     ...mapGetters([
       'shownStops',
       'stationsGeojson'
@@ -50,17 +53,18 @@ export default {
   },
   watch: {
     shownStops: function () {
-      if (this.map && this.map.isStyleLoaded()) {
-        this.map.removeLayer('stops')
-        this.map.removeSource('stopsData')
-        this.setLayer('stops')
-      }
+      this.rerenderLayer('stops')
     },
     stationsGeojson: function () {
-      if (this.map && this.map.isStyleLoaded()) {
-        this.map.removeLayer('stations')
-        this.map.removeSource('stationsData')
-        this.setLayer('stations')
+      this.rerenderLayer('stations')
+    },
+    selectedType: function (val, oldVal) {
+      if (val === null) {
+        switch (oldVal) {
+          case 'stops':
+            this.setData(this.map.getSource(`stopsData`), this.shownStops)
+            break
+        }
       }
     }
   },
@@ -78,6 +82,21 @@ export default {
       'loadData'
     ]),
 
+    rerenderLayer(type) {
+      if (this.map && this.map.isStyleLoaded()) {
+        this.map.removeLayer(type)
+        this.map.removeSource(`${type}Data`)
+        this.setLayer(type)
+      }
+    },
+
+    setData(source, features) {
+      source.setData({
+        "type": "FeatureCollection",
+        "features": features
+      })
+    },
+
     setLayer(type) {
       const source = this.map.getSource(`${type}Data`)
       let features
@@ -89,42 +108,52 @@ export default {
           features = this.shownStops
           break
       }
-      const geoJson = {
-        type: `geojson`,
-        data: {
-          type: 'FeatureCollection',
-          features: features
-        }
+
+      const data = {
+        type: 'FeatureCollection',
+        features: features
       }
       if (source) {
-        source.setData(geoJson)
+        source.setData({
+          type: `FeatureCollection`,
+          data
+        })
       } else {
-        this.map.addSource(`${type}Data`, geoJson)
+        this.map.addSource(`${type}Data`, {
+          type: `geojson`,
+          data
+        })
         const options = {
           ...layersConfig[type]
         }
         this.map.addLayer(options);
+
         this.map.on(`click`, type, (e) => {
-          // const i = this.shownStops.findIndex((stop) => {
-          //   return stop.properties.id === e.features[0].properties.id
-          // })
-          // const newShownStops = [...this.shownStops]
-          // newShownStops.splice(i, 1, {
-          //   ...this.shownStops[i],
-          //   properties: {
-          //     ...this.shownStops[i].properties,
-          //     isActive: true
-          //   }
-          // });
-          //
-          // const sourcexxx = this.map.getSource(`stopsData`)
-          // sourcexxx.setData({
-          //     type: `geojson`,
-          //     data: {
-          //       type: 'FeatureCollection',
-          //       features: newShownStops
-          //     }
-          //   })
+          // this.map.setFeatureState(
+          //     {source: `${type}Data`, id: e.features[0].properties.id},
+          //     {isActive: true}
+          // );
+
+          const setActiveValue = () => {
+            const i = this.shownStops.findIndex((stop) => {
+              return stop.properties.id === e.features[0].properties.id
+            })
+            const newShownStops = [...this.shownStops]
+            newShownStops.splice(i, 1, {
+              ...this.shownStops[i],
+              properties: {
+                ...this.shownStops[i].properties,
+                isActive: true
+              }
+            });
+
+            // console.log(newShownStops);
+            const sourcexxx = this.map.getSource(`stopsData`)
+
+            this.setData(sourcexxx, newShownStops)
+            // }
+          }
+
 
           switch (type) {
             case 'stations':
@@ -132,6 +161,7 @@ export default {
               break
             case 'stops':
               this.SET_SELECTED_STOP_ID(e.features[0].properties.id)
+              setActiveValue()
               break
           }
           this.SET_SELECTED_TYPE(type)

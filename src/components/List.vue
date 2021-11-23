@@ -7,7 +7,7 @@
     >
       <a
           href="#"
-          @click.prevent="handleItemClick(item)"
+          @click.prevent="handleItemClick(item, i)"
           :id="item.id"
       >
         {{ item.label }}
@@ -70,24 +70,25 @@ export default {
   },
 
   methods: {
-    handleItemClick(item) {
-      // console.log(item);
+    handleItemClick(item, i) {
       if (item.children) {
-        item.isActive = !item.isActive
+        this.$set(this.itemsWithState, i, {
+            ...item,
+            isActive: !item.isActive
+          })
       } else {
         this.$emit(`item-click`, item.id)
       }
     },
     expandAll() {
-      this.itemsWithState.forEach((item) => {
-        item.isActive = true
+      this.itemsWithState = this.itemsWithState.map((item) => {
+        return {
+          ...item,
+          isActive: true
+        }
       })
     },
-    collapseAll() {
-      this.itemsWithState.forEach((item) => {
-        item.isActive = false
-      })
-    }
+
   }
 }
 </script>
