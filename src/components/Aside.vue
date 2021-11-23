@@ -84,7 +84,7 @@ export default {
       return this.$store.getters.shownStops.map(stop => {
         return {
           label: stop.properties.name,
-          id: stop.properties.id
+          id: stop.properties.id,
         }
       })
     }

@@ -1,25 +1,25 @@
 <template>
-  <ul class="list" ref="list">
+  <ul class="list">
     <li
-        :class="['list__item',  item.children ? 'list__item--with-sub' : '']"
-        v-for="(item, i) in items"
+        v-for="(item, i) in itemsWithState"
+        :class="['list__item', item.isActive && 'active', item.children && 'list__item--with-sub']"
         :key="i"
     >
       <a
           href="#"
-          @click.prevent="handleItemClick($event, item.children)"
+          @click.prevent="handleItemClick(item)"
           :id="item.id"
       >
         {{ item.label }}
       </a>
-      <ul v-if="item.children" class="list__sub">
+      <ul v-if="item.children" v-show="item.isActive" class="list__sub">
         <li v-for="subItem in item.children"
             :key="subItem.id"
         >
           <a
               :id="subItem.id"
               href="#"
-              @click.prevent="handleItemClick($event)"
+              @click.prevent="handleItemClick(subItem)"
           >
             {{ subItem.label }}
           </a>
@@ -35,40 +35,57 @@ import {mapState} from "vuex";
 
 export default {
   name: "List",
+  data() {
+    return {
+      itemsWithState: []
+    }
+  },
   props: {
-    items: []
+    items: Array,
   },
   watch: {
     stationsInputValue() {
       if (this.stationsInputValue === "") {
-        this.collapseAll()
+        // this.collapseAll()
       } else {
-        this.expandAll()
+        this.$nextTick(() => {
+          this.expandAll()
+        })
       }
+    },
+    items() {
+      this.itemsWithState = this.items.map((item) => {
+        return {
+          ...item,
+          isActive: false
+        }
+      })
     }
   },
+
   computed: {
     ...mapState([
       'stationsInputValue'
-    ])
+    ]),
   },
+
   methods: {
-    handleItemClick(e, children) {
-      if (children) {
-        const li = e.currentTarget.parentNode
-        li.classList.contains(`active`) ? li.classList.remove(`active`) : li.classList.add(`active`)
+    handleItemClick(item) {
+      // console.log(item);
+      if (item.children) {
+        item.isActive = !item.isActive
       } else {
-        this.$emit(`item-click`, e.target.id)
+        this.$emit(`item-click`, item.id)
       }
     },
     expandAll() {
-      Array.from(this.$refs.list.children).forEach((item) => {
-        item.classList.add(`active`)
+      this.itemsWithState.forEach((item) => {
+        item.isActive = true
       })
     },
     collapseAll() {
-      Array.from(this.$refs.list.children).forEach((item) => {
-        item.classList.remove(`active`)
+      this.itemsWithState.forEach((item) => {
+        item.isActive = false
       })
     }
   }
@@ -135,14 +152,14 @@ export default {
   &.list__item--with-sub::before {
     transform: rotate(180deg);
   }
-  .list__sub {
-    display: flex;
-  }
+  //.list__sub {
+  //  display: flex;
+  //}
 }
 
 .list__sub {
   list-style: none;
-  display: none;
+  //display: none;
   flex-direction: column;
   padding: 0;
   align-items: stretch;

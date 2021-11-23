@@ -54,7 +54,6 @@ export default {
         this.map.removeLayer('stops')
         this.map.removeSource('stopsData')
         this.setLayer('stops')
-        // this.setStopsLayer()
       }
     },
     stationsGeojson: function () {
@@ -62,7 +61,6 @@ export default {
         this.map.removeLayer('stations')
         this.map.removeSource('stationsData')
         this.setLayer('stations')
-        // this.setStationsLayer()
       }
     }
   },
@@ -91,7 +89,6 @@ export default {
           features = this.shownStops
           break
       }
-
       const geoJson = {
         type: `geojson`,
         data: {
@@ -99,19 +96,35 @@ export default {
           features: features
         }
       }
-
       if (source) {
         source.setData(geoJson)
       } else {
         this.map.addSource(`${type}Data`, geoJson)
         const options = {
-          // source: `${type}Data`,
           ...layersConfig[type]
         }
-
         this.map.addLayer(options);
-
         this.map.on(`click`, type, (e) => {
+          // const i = this.shownStops.findIndex((stop) => {
+          //   return stop.properties.id === e.features[0].properties.id
+          // })
+          // const newShownStops = [...this.shownStops]
+          // newShownStops.splice(i, 1, {
+          //   ...this.shownStops[i],
+          //   properties: {
+          //     ...this.shownStops[i].properties,
+          //     isActive: true
+          //   }
+          // });
+          //
+          // const sourcexxx = this.map.getSource(`stopsData`)
+          // sourcexxx.setData({
+          //     type: `geojson`,
+          //     data: {
+          //       type: 'FeatureCollection',
+          //       features: newShownStops
+          //     }
+          //   })
 
           switch (type) {
             case 'stations':

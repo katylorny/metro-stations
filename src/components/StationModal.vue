@@ -1,36 +1,23 @@
 <template>
   <el-dialog :visible.sync="isVisible" class="modal">
-    <div v-if="selectedType === 'stations'" class="modal__body modal__body--stations">
+    <div class="modal__body modal__body--stations">
       <div class="modal__header">
         <inline-svg
             :src="metroLogoImg"
             width="25"
             height="25"
-            :fill="activeStation.color"
+            :fill="activeCardData.color || 'black'"
             aria-label="My image"
         />
         <h1 class="modal__title">
-          {{ activeStation.name }}
+          {{ activeCardData.name }}
         </h1>
       </div>
 
       <div class="modal__main">
-        <p>Округ: {{ activeStation.admArea }}</p>
-        <p>Район: {{ activeStation.district }}</p>
-        <p>Статус: {{ activeStation.status }}</p>
-      </div>
-
-    </div>
-    <div v-if="selectedType === 'stops'" class="modal__body modal__body--stops">
-      <div class="modal__header">
-        <h1 class="modal__title modal__title--stop">
-          {{ activeStop.name }}
-        </h1>
-      </div>
-
-      <div class="modal__main">
-        <p>Адрес: {{ activeStop.address }}</p>
-        <p> ID: {{ activeStop.id }}</p>
+        <p v-for="(prop, i) in activeCardData.properties" :key="i">
+          {{ prop.name }}: {{ activeCardData[prop.id] }}
+        </p>
       </div>
 
     </div>
@@ -49,6 +36,37 @@ export default {
   data() {
     return {
       metroLogoImg,
+      config: {
+        stations: {
+          properties: [
+            {
+              id: 'admArea',
+              name: 'Округ'
+            },
+            {
+              id: 'district',
+              name: 'Район'
+            },
+            {
+              id: 'status',
+              name: 'Статус'
+            }
+          ]
+        },
+        stops: {
+          properties: [
+            {
+              id: 'id',
+              name: 'ID'
+            },
+            {
+              id: 'address',
+              name: 'Адрес'
+            },
+
+          ]
+        }
+      }
     }
   },
   computed: {
@@ -61,11 +79,20 @@ export default {
       'selectedStopId',
       'selectedType'
     ]),
-    activeStation() {
-      return this.activeStationData && this.activeStationData.properties
-    },
-    activeStop() {
-      return this.activeStopData && this.activeStopData.properties
+    activeCardData() {
+      let data = {}
+      if (this.activeStationData) {
+        data = {
+          properties: this.config.stations.properties,
+          ...this.activeStationData.properties
+        }
+      } else if (this.activeStopData) {
+        data = {
+          properties: this.config.stops.properties,
+          ...this.activeStopData.properties
+        }
+      }
+      return data
     },
     isVisible: {
       get() {
@@ -109,12 +136,6 @@ export default {
   font-size: 18px;
   margin-left: 8px;
   margin-top: 16px;
-}
-
-.modal__body--stops {
-  .modal__title {
-    margin-left: 0;
-  }
 }
 
 .modal__main {

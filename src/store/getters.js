@@ -52,7 +52,8 @@ export default {
                 properties: {
                     id: stop.id,
                     name: stop.name,
-                    address: stop.address
+                    address: stop.address,
+                    isActive: false
                 },
             }
         })
@@ -69,19 +70,19 @@ export default {
     },
     shownStops(state, getters) {
         return getters.stopsGeojson.filter((stop) => {
-            return stop.properties.name.indexOf(state.stopsInputValue) > -1
+            return stop.properties.name.toLowerCase().indexOf(state.stopsInputValue.toLowerCase()) > -1
         })
     },
     shownStations(state, getters) {
         const filteredLines = getters.stationsWithId.filter((line) => {
-            return line.stations.some(station => station.name.indexOf(state.stationsInputValue) > -1)
+            return line.stations.some(station => station.name.toLowerCase().indexOf(state.stationsInputValue.toLowerCase()) > -1)
         })
         const linesWithFilteredStations = []
         filteredLines.forEach((lineInfo) => {
             const lineWithFilteredStations = {
                 ...lineInfo,
                 stations: lineInfo.stations.filter(station => {
-                    return station.name.indexOf(state.stationsInputValue) > -1
+                    return station.name.toLowerCase().indexOf(state.stationsInputValue.toLowerCase()) > -1
                 })
             }
             linesWithFilteredStations.push(lineWithFilteredStations)
