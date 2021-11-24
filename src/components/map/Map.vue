@@ -70,24 +70,29 @@ export default {
             ])
             break
         }
-      }
-      switch (layerName) {
-        case 'stops':
-          this.map.setPaintProperty(layerName, 'circle-color', [
-            'case',
-            ['==', ['get', 'id'], this.selectedId],
-            'red',
-            'black'
-          ])
-          break
-        case 'stations':
-          this.map.setPaintProperty(layerName, 'circle-color', [
-            'case',
-            ['==', ['get', 'id'], this.selectedId],
-            'black',
-            ['get', 'color']
-          ])
-          break
+      } else {
+        this.map.setPaintProperty(layerName, 'circle-color', [
+          'case',
+          ['==', ['get', 'id'], this.selectedId],   // если этот пункт выбран
+          ['string',
+            ['case',                                // то
+              ['==', layerName, 'stops'],           // если выбранный пункт остановка
+              'red',                                // то он становится красным
+              ['==', layerName, 'stations'],        // если станция
+              'black',                              // то черным
+              'red']                                // запасной вариант
+          ],
+          ['string',                                // если пункт не является выбранным
+            [
+              'case',
+              ['==', layerName, 'stops'],           // то если он остановка
+              'black',                              // то он черный
+              ['==', layerName, 'stations'],        // а если станция
+              ['get', 'color'],                     // то того цвета, который у него в свойствах
+              'black'                               // запасной вариант
+            ]
+          ]
+        ])
       }
     }
   },
@@ -120,7 +125,6 @@ export default {
     },
 
     setLayer(type) {
-      console.log(1111111111111111);
       const source = this.map.getSource(`${type}Data`)
       let features
       switch (type) {
@@ -152,7 +156,6 @@ export default {
         this.map.addLayer(options);
 
         this.map.on(`click`, type, (e) => {
-          console.log(e.features[0].properties.id);
           this.SET_SELECTED_ID(e.features[0].properties.id)
           this.SET_SELECTED_TYPE(type)
         })

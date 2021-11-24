@@ -53,7 +53,6 @@ export default {
                     id: stop.id,
                     name: stop.name,
                     address: stop.address,
-                    isActive: false
                 },
             }
         })
