@@ -6,13 +6,12 @@ export default {
     // станции
     stations: [],
     stationsInputValue: '',
-    selectedStationId: null,
 
     // остановки
     stops: [],
     stopsInputValue: '',
-    selectedStopId: null,
 
-    // тип объекта, по которому кликнули
-    selectedType: ''
+    // объект, по которому кликнули
+    selectedType: '',
+    selectedId: null
 }

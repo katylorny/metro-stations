@@ -29,7 +29,7 @@
 <script>
 import {mapGetters, mapMutations, mapState} from "vuex";
 import metroLogoImg from "../assets/img/metro-logo.svg"
-import {SET_SELECTED_STATION_ID, SET_SELECTED_STOP_ID, SET_SELECTED_TYPE} from "../store/helpers/mutation-types";
+import {SET_SELECTED_ID, SET_SELECTED_TYPE} from "../store/helpers/mutation-types";
 
 export default {
   name: "StationModal",
@@ -75,8 +75,7 @@ export default {
       'activeStopData'
     ]),
     ...mapState([
-      'selectedStationId',
-      'selectedStopId',
+      'selectedId',
       'selectedType'
     ]),
     activeCardData() {
@@ -96,20 +95,18 @@ export default {
     },
     isVisible: {
       get() {
-        return !!(this.selectedStopId || this.selectedStationId)
+        return !!this.selectedId
       },
       set() {
         this.SET_SELECTED_TYPE(null)
-        this.SET_SELECTED_STATION_ID(null)
-        this.SET_SELECTED_STOP_ID(null)
+        this.SET_SELECTED_ID(null)
       }
     }
   },
   methods: {
     ...mapMutations([
       SET_SELECTED_TYPE,
-      SET_SELECTED_STATION_ID,
-      SET_SELECTED_STOP_ID,
+      SET_SELECTED_ID
     ])
   }
 }

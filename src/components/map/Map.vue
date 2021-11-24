@@ -11,8 +11,7 @@ import {initMap} from "./core/initMap";
 import {mapActions} from "vuex";
 import {layersConfig} from "./configs";
 import {
-  SET_SELECTED_STATION_ID,
-  SET_SELECTED_STOP_ID, SET_SELECTED_TYPE,
+  SET_SELECTED_ID, SET_SELECTED_TYPE,
   SET_STATIONS,
   SET_STOPS
 } from "../../store/helpers/mutation-types";
@@ -44,7 +43,8 @@ export default {
   },
   computed: {
     ...mapState([
-      'selectedType'
+      'selectedType',
+      'selectedId'
     ]),
     ...mapGetters([
       'shownStops',
@@ -58,13 +58,36 @@ export default {
     stationsGeojson: function () {
       this.rerenderLayer('stations')
     },
-    selectedType: function (val, oldVal) {
-      if (val === null) {
-        switch (oldVal) {
+    selectedType: function (layerName, oldValue) {
+      if (layerName === null) {
+        switch (oldValue) {
           case 'stops':
-            this.setData(this.map.getSource(`stopsData`), this.shownStops)
+            this.map.setPaintProperty('stops', 'circle-color', 'black')
+            break
+          case 'stations':
+            this.map.setPaintProperty('stations', 'circle-color', [
+              'get', 'color'
+            ])
             break
         }
+      }
+      switch (layerName) {
+        case 'stops':
+          this.map.setPaintProperty(layerName, 'circle-color', [
+            'case',
+            ['==', ['get', 'id'], this.selectedId],
+            'red',
+            'black'
+          ])
+          break
+        case 'stations':
+          this.map.setPaintProperty(layerName, 'circle-color', [
+            'case',
+            ['==', ['get', 'id'], this.selectedId],
+            'black',
+            ['get', 'color']
+          ])
+          break
       }
     }
   },
@@ -73,8 +96,7 @@ export default {
     ...mapMutations([
       SET_STATIONS,
       SET_STOPS,
-      SET_SELECTED_STATION_ID,
-      SET_SELECTED_STOP_ID,
+      SET_SELECTED_ID,
       SET_SELECTED_TYPE
     ]),
 
@@ -98,6 +120,7 @@ export default {
     },
 
     setLayer(type) {
+      console.log(1111111111111111);
       const source = this.map.getSource(`${type}Data`)
       let features
       switch (type) {
@@ -129,41 +152,8 @@ export default {
         this.map.addLayer(options);
 
         this.map.on(`click`, type, (e) => {
-          // this.map.setFeatureState(
-          //     {source: `${type}Data`, id: e.features[0].properties.id},
-          //     {isActive: true}
-          // );
-
-          const setActiveValue = () => {
-            const i = this.shownStops.findIndex((stop) => {
-              return stop.properties.id === e.features[0].properties.id
-            })
-            const newShownStops = [...this.shownStops]
-            newShownStops.splice(i, 1, {
-              ...this.shownStops[i],
-              properties: {
-                ...this.shownStops[i].properties,
-                isActive: true
-              }
-            });
-
-            // console.log(newShownStops);
-            const sourcexxx = this.map.getSource(`stopsData`)
-
-            this.setData(sourcexxx, newShownStops)
-            // }
-          }
-
-
-          switch (type) {
-            case 'stations':
-              this.SET_SELECTED_STATION_ID(e.features[0].properties.id)
-              break
-            case 'stops':
-              this.SET_SELECTED_STOP_ID(e.features[0].properties.id)
-              setActiveValue()
-              break
-          }
+          console.log(e.features[0].properties.id);
+          this.SET_SELECTED_ID(e.features[0].properties.id)
           this.SET_SELECTED_TYPE(type)
         })
       }

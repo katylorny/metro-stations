@@ -153,14 +153,11 @@ export default {
   &.list__item--with-sub::before {
     transform: rotate(180deg);
   }
-  //.list__sub {
-  //  display: flex;
-  //}
+
 }
 
 .list__sub {
   list-style: none;
-  //display: none;
   flex-direction: column;
   padding: 0;
   align-items: stretch;

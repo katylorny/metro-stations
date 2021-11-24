@@ -8,12 +8,7 @@ export const layersConfig = {
         'source': 'stopsData',
         'paint': {
             'circle-radius': 8,
-            'circle-color': [
-                'case',
-                ['==', ['get', 'isActive'], true ],
-                'red',
-                'black'
-            ]
+            'circle-color': 'black'
         }
     },
     stations: {
