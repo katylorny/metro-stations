@@ -60,38 +60,17 @@ export default {
     },
     selectedType: function (layerName, oldValue) {
       if (layerName === null) {
-        switch (oldValue) {
-          case 'stops':
-            this.map.setPaintProperty('stops', 'circle-color', 'black')
-            break
-          case 'stations':
-            this.map.setPaintProperty('stations', 'circle-color', [
-              'get', 'color'
-            ])
-            break
-        }
+        const color = oldValue === 'stops' ? 'black' : ['get', 'color']
+        this.map.setPaintProperty(oldValue, 'circle-color', color)
       } else {
+        const activeCircleColor = layerName === 'stops' ? 'red' : 'black'
+        const inactiveCircleColor = layerName === 'stops' ? 'black' : ['get', 'color']
+
         this.map.setPaintProperty(layerName, 'circle-color', [
           'case',
-          ['==', ['get', 'id'], this.selectedId],   // если этот пункт выбран
-          ['string',
-            ['case',                                // то
-              ['==', layerName, 'stops'],           // если выбранный пункт остановка
-              'red',                                // то он становится красным
-              ['==', layerName, 'stations'],        // если станция
-              'black',                              // то черным
-              'red']                                // запасной вариант
-          ],
-          ['string',
-            [
-              'case',                               // если пункт не является выбранным
-              ['==', layerName, 'stops'],           // то если он остановка
-              'black',                              // то он черный
-              ['==', layerName, 'stations'],        // а если станция
-              ['get', 'color'],                     // то того цвета, который у него в свойствах
-              'black'                               // запасной вариант
-            ]
-          ]
+          ['==', ['get', 'id'], this.selectedId],
+          activeCircleColor,
+          inactiveCircleColor
         ])
       }
     }
